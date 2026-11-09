@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Dashboard | MediSecure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --bg:#050e1d; --sidebar:#07152a; --panel:#091a31; --panel2:#0d2240;
+      --border:#163253; --text:#eaf3ff; --muted:#91afd2; --blue:#1685ff;
+      --blue-soft:#0b3670; --green:#08c7a2; --purple:#925cff; --red:#ff4568;
+      --shadow:0 12px 32px rgba(0,0,0,.16);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif}
+    body{background:var(--bg);color:var(--text);min-height:100vh}
+    a{color:inherit}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:230px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:5}
+    .brand{height:78px;padding:18px 22px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+    .brand-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,#1685ff,#1550c9);font-size:19px}
+    .brand h2{font-size:18px;letter-spacing:-.4px}.brand p{font-size:10px;color:var(--muted);margin-top:4px}
+    .doctor-box{padding:24px 16px;text-align:center;border-bottom:1px solid var(--border)}
+    .avatar{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;background:linear-gradient(135deg,#1685ff,#4f65e8);border:4px solid #143e70;font-size:30px;font-weight:700;color:white;text-transform:uppercase}
+    .doctor-box h3{font-size:14px;margin-bottom:6px}.doctor-box p{font-size:12px;color:var(--muted)}
+    .side-nav{padding:18px 12px;flex:1}
+    .side-link{display:flex;align-items:center;gap:12px;padding:13px 14px;margin-bottom:8px;text-decoration:none;color:#a9c5e7;border-radius:11px;font-size:13px;font-weight:600}
+    .side-link i{width:18px;text-align:center}.side-link.active,.side-link:hover{background:#0b3670;color:#55b7ff}
+    .side-link.logout{color:var(--red);margin-top:8px}.side-link.logout:hover{background:#39182b}
+    .main{margin-left:230px;padding:24px 26px 30px;min-width:0}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:25px}
+    .topbar h1{font-size:25px;letter-spacing:-.6px}.topbar p{font-size:12px;color:var(--muted);margin-top:6px}
+    .top-actions{display:flex;align-items:center;gap:12px}
+    .search{display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--border);border-radius:24px;padding:12px 15px;width:260px;color:var(--muted)}
+    .search input{background:none;border:0;outline:0;color:var(--text);width:100%;font-size:12px}
+    .icon-btn{height:40px;width:40px;border-radius:12px;border:1px solid var(--border);background:var(--panel);display:grid;place-items:center;color:#b5d4f5;text-decoration:none}
+    .icon-btn:hover{color:#55b7ff;border-color:var(--blue)}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}
+    .stat{background:linear-gradient(145deg,var(--panel),#07152a);border:1px solid var(--border);border-radius:17px;padding:20px;display:flex;align-items:center;gap:14px;min-width:0;box-shadow:var(--shadow)}
+    .stat-icon{width:55px;height:55px;flex:0 0 55px;border-radius:50%;display:grid;place-items:center;background:#0b4c9c;color:#dff0ff;font-size:21px}
+    .stat-icon.green{background:#075d55;color:#66f5d6}.stat-icon.purple{background:#492b9c;color:#e4d6ff}.stat-icon.cyan{background:#075d82;color:#9ceaff}
+    .stat h3{font-size:24px;margin-bottom:5px;overflow-wrap:anywhere}.stat p{font-size:11px;line-height:1.5;color:var(--muted)}
+    .middle{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,.9fr);gap:18px;margin-bottom:22px}
+    .panel{background:linear-gradient(145deg,var(--panel),#07152a);border:1px solid var(--border);border-radius:17px;padding:21px;min-width:0;box-shadow:var(--shadow)}
+    .panel-title{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:15px;font-weight:700;margin-bottom:21px}
+    .panel-title i{color:#2b9bff;margin-right:8px}.muted{font-size:11px;color:var(--muted);font-weight:500}
+    .summary{display:flex;align-items:center;gap:20px;min-height:200px}
+    .donut{width:160px;height:160px;flex:0 0 160px;border-radius:50%;background:conic-gradient(var(--blue) 0 57%,var(--green) 57% 78%,var(--purple) 78% 100%);display:grid;place-items:center}
+    .donut-inner{width:98px;height:98px;border-radius:50%;background:#09182c;display:flex;flex-direction:column;justify-content:center;align-items:center}
+    .donut-inner strong{font-size:24px}.donut-inner span{font-size:10px;color:var(--muted);margin-top:4px}
+    .legend{display:flex;flex-direction:column;gap:18px;flex:1;min-width:0}
+    .legend-row{display:flex;align-items:center;gap:9px;font-size:11px;color:#c2d8f3}
+    .dot{width:10px;height:10px;border-radius:3px;flex:0 0 10px}.legend-row strong{margin-left:auto;font-size:12px;color:var(--text)}
+    
+    /* ACTIVITY LIST STYLES */
+    .activity-list{display:flex;flex-direction:column;gap:16px}
+    .activity{display:flex;align-items:center;gap:12px;min-width:0;text-decoration:none;color:inherit;transition:0.2s;padding:6px;border-radius:10px;}
+    .activity:hover{background:rgba(13,34,64,0.6);}
+    .activity-icon{width:42px;height:42px;flex:0 0 42px;border-radius:12px;background:#075b57;color:#5df0d0;display:grid;place-items:center;font-size:16px}
+    .activity-icon.purple{background:#40298b;color:#d5c4ff}.activity-icon.blue{background:#0c4b8c;color:#b7e0ff}
+    .activity-copy{min-width:0;flex:1}.activity-copy h4{font-size:12px;line-height:1.5;margin-bottom:4px}.activity-copy p{font-size:10px;color:var(--muted)}
+    .activity-time{font-size:10px;color:var(--muted);white-space:nowrap;align-self:flex-start;padding-top:4px}
+    
+    .profile-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .mini-avatar{width:43px;height:43px;border-radius:50%;background:#123f7a;color:#8cc8ff;display:grid;place-items:center;font-weight:700;font-size:18px;text-transform:uppercase}
+    .profile-head h3{font-size:13px;margin-bottom:4px}.profile-head p{font-size:11px;color:var(--muted)}
+    .status{background:#064b43;color:#5af0c5;border-radius:8px;padding:5px 8px;font-size:10px;font-weight:700;margin-left:auto}
+    .detail{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #142d4b;font-size:11px}
+    .detail:last-of-type{border-bottom:0}.detail span:first-child{color:var(--muted)}.detail strong{text-align:right;overflow-wrap:anywhere}
+    .security{color:#c49bff}
+    .profile-button{display:inline-flex;margin-top:17px;padding:10px 13px;border:1px solid #087eea;border-radius:9px;color:#3db0ff;text-decoration:none;font-size:11px;font-weight:700;gap:12px}
+    .profile-button:hover{background:#0b3670}
+    .quick-panel{padding:20px}
+    .quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .quick-card{display:flex;gap:14px;align-items:flex-start;padding:17px;background:rgba(13,34,64,.78);border:1px solid #142f50;border-radius:13px;text-decoration:none;min-width:0;transition:.2s}
+    .quick-card:hover{border-color:#1685ff;transform:translateY(-2px);background:#0d2748}
+    .quick-icon{width:46px;height:46px;flex:0 0 46px;border-radius:50%;display:grid;place-items:center;background:#0c58b9;color:#e2f2ff;font-size:18px}
+    .quick-icon.green{background:#075c55;color:#73f5d7}.quick-icon.purple{background:#4a2c9c;color:#e1d5ff}.quick-icon.red{background:#63213a;color:#ff9cb1}
+    .quick-copy{min-width:0}.quick-copy h3{font-size:12px;margin:2px 0 7px}.quick-copy p{font-size:10px;line-height:1.6;color:var(--muted);margin-bottom:9px}
+    .quick-copy span{font-size:11px;font-weight:700;color:#39adff}.quick-card.logout .quick-copy span{color:#ff6583}
+    @media(max-width:1250px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.middle{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-panel{grid-column:1/-1}.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:850px){.sidebar{width:190px}.main{margin-left:190px;padding:20px 16px}.middle{grid-template-columns:1fr}.profile-panel{grid-column:auto}.summary{justify-content:flex-start}}
+    @media(max-width:620px){.sidebar{width:65px}.brand{justify-content:center;padding:12px 5px}.brand-copy,.doctor-box h3,.doctor-box p,.side-link span{display:none}.doctor-box{padding:17px 5px}.avatar{width:43px;height:43px;font-size:18px}.side-nav{padding:15px 7px}.side-link{justify-content:center;padding:14px 5px}.side-link i{font-size:17px}.main{margin-left:65px;padding:17px 11px}.topbar{align-items:flex-start}.topbar h1{font-size:20px}.topbar p{max-width:230px;line-height:1.5}.search{display:none}.stats{gap:10px}.stat{padding:13px;gap:9px}.stat-icon{width:39px;height:39px;flex-basis:39px;font-size:16px}.stat h3{font-size:19px}.stat p{font-size:10px}.panel{padding:16px}.summary{flex-direction:column}.donut{width:145px;height:145px;flex-basis:145px}.donut-inner{width:90px;height:90px}.legend{width:100%}.quick-grid{grid-template-columns:1fr}.quick-card{padding:14px}}
+    @media(max-width:380px){.stats{grid-template-columns:1fr}.topbar{gap:10px}.top-actions{gap:5px}.icon-btn{width:34px;height:34px}}
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-copy"><h2>MediSecure</h2><p>Secure Medical Data Transmission</p></div>
+    </div>
+    <div class="doctor-box">
+      <div class="avatar">{{ (doctor.doctor_name or 'D')[0] }}</div>
+      <h3>Dr. {{ doctor.doctor_name }}</h3>
+      <p>{{ doctor.specialization }}</p>
+    </div>
+    <nav class="side-nav">
+      <a href="{{ url_for('doctor_dashboard', doctor_id=doctor.doctor_id) }}" class="side-link active">
+        <i class="fa-solid fa-house"></i><span>Dashboard</span>
+      </a>
+      <a href="{{ url_for('logout') }}" class="side-link logout">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1>Doctor Dashboard</h1>
+        <p>Welcome back, Dr. {{ doctor.doctor_name }}. Here is your MediSecure overview.</p>
+      </div>
+      <div class="top-actions">
+        <label class="search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="dashboardSearch" type="search" placeholder="Search reports, doctors...">
+        </label>
+      </div>
+    </header>
+
+    <section class="stats">
+      <article class="stat">
+        <div class="stat-icon"><i class="fa-solid fa-file-medical"></i></div>
+        <div><h3>{{ total_reports }}</h3><p>Total Uploaded Reports</p></div>
+      </article>
+      <article class="stat">
+        <div class="stat-icon green"><i class="fa-solid fa-paper-plane"></i></div>
+        <div><h3>{{ sent_reports }}</h3><p>Reports you have sent</p></div>
+      </article>
+      <article class="stat">
+        <div class="stat-icon purple"><i class="fa-solid fa-inbox"></i></div>
+        <div><h3>{{ received_reports }}</h3><p>Reports you have received</p></div>
+      </article>
+      <article class="stat">
+        <div class="stat-icon cyan"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h3 style="font-size:20px">AES + RSA</h3><p>Secure report transfer</p></div>
+      </article>
+    </section>
+
+    <section class="middle">
+      <article class="panel">
+        <div class="panel-title"><span><i class="fa-solid fa-chart-column"></i>Report Summary</span><span class="muted">Overview</span></div>
+        <div class="summary">
+          <div class="donut" role="img" aria-label="Report summary illustration">
+            <div class="donut-inner"><strong>{{ total_reports }}</strong><span>Total Reports</span></div>
+          </div>
+          <div class="legend">
+            <div class="legend-row"><span class="dot" style="background:#1685ff"></span><span>Uploaded Reports</span><strong>{{ total_reports }}</strong></div>
+            <div class="legend-row"><span class="dot" style="background:#08c7a2"></span><span>Sent Reports</span><strong>{{ sent_reports }}</strong></div>
+            <div class="legend-row"><span class="dot" style="background:#925cff"></span><span>Received Reports</span><strong>{{ received_reports }}</strong></div>
+            
+            <!-- REMOVED: View uploaded reports link -->
+            
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-title"><span><i class="fa-solid fa-clock"></i>Recent Activity</span></div>
+        <div class="activity-list">
+          
+          {% if recent_activity %}
+            {% for activity in recent_activity %}
+              <!-- Dynamic clickable activity item -->
+              <a href="
+                {% if activity.type == 'sent' %}{{ url_for('sent_reports', doctor_id=doctor.doctor_id) }}
+                {% elif activity.type == 'received' %}{{ url_for('received_reports', doctor_id=doctor.doctor_id) }}
+                {% else %}{{ url_for('view_my_reports', doctor_id=doctor.doctor_id) }}{% endif %}
+              " class="activity">
+                
+                <div class="activity-icon {{ activity.color }}"><i class="fa-solid {{ activity.icon }}"></i></div>
+                <div class="activity-copy">
+                  <h4>{{ activity.title }}</h4>
+                  <p>{{ activity.desc }}</p>
+                </div>
+                <div class="activity-time">
+                  {{ activity.time[:10] }}
+                </div>
+              </a>
+            {% endfor %}
+          {% else %}
+            <!-- Fallback if there is no activity yet -->
+            <div class="activity">
+              <div class="activity-icon blue"><i class="fa-solid fa-info-circle"></i></div>
+              <div class="activity-copy">
+                <h4>No recent activity</h4>
+                <p>Your recent report actions will appear here.</p>
+              </div>
+            </div>
+          {% endif %}
+
+        </div>
+      </article>
+
+      <article class="panel profile-panel">
+        <div class="panel-title"><span><i class="fa-solid fa-user-doctor"></i>Doctor Details</span></div>
+        <div class="profile-head">
+          <div class="mini-avatar">{{ (doctor.doctor_name or 'D')[0] }}</div>
+          <div><h3>Dr. {{ doctor.doctor_name }}</h3><p>{{ doctor.specialization }}</p></div>
+          <span class="status">Active</span>
+        </div>
+        <div class="detail"><span>Doctor name</span><strong>Dr. {{ doctor.doctor_name }}</strong></div>
+        <div class="detail"><span>Specialization</span><strong>{{ doctor.specialization }}</strong></div>
+        <div class="detail"><span>System status</span><strong style="color:#08c7a2">Active</strong></div>
+        <div class="detail"><span>Security</span><strong class="security">AES + RSA</strong></div>
+        <a class="profile-button" href="{{ url_for('doctor_profile', doctor_id=doctor.doctor_id) }}">View / Edit Profile <i class="fa-solid fa-arrow-right"></i></a>
+      </article>
+    </section>
+
+    <section class="panel quick-panel">
+      <div class="panel-title"><span><i class="fa-solid fa-bolt"></i>Quick Actions</span><span class="muted">Manage your medical reports</span></div>
+      <div class="quick-grid">
+        <a href="{{ url_for('upload_report', doctor_id=doctor.doctor_id) }}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <div class="quick-copy"><h3>Upload Medical Report</h3><p>Upload a medical report and X-ray image.</p><span>Upload now <i class="fa-solid fa-arrow-right"></i></span></div>
+        </a>
+        <a href="{{ url_for('view_my_reports', doctor_id=doctor.doctor_id) }}" class="quick-card">
+          <div class="quick-icon green"><i class="fa-solid fa-folder-open"></i></div>
+          <div class="quick-copy"><h3>My Uploaded Reports</h3><p>View reports you have uploaded.</p><span>View reports <i class="fa-solid fa-arrow-right"></i></span></div>
+        </a>
+        <a href="{{ url_for('send_secure_report', doctor_id=doctor.doctor_id) }}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-paper-plane"></i></div>
+          <div class="quick-copy"><h3>Send Secure Report</h3><p>Send encrypted reports to other doctors.</p><span>Send report <i class="fa-solid fa-arrow-right"></i></span></div>
+        </a>
+        <a href="{{ url_for('sent_reports', doctor_id=doctor.doctor_id) }}" class="quick-card">
+          <div class="quick-icon purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
+          <div class="quick-copy"><h3>Sent History</h3><p>Review the history of reports you sent.</p><span>View history <i class="fa-solid fa-arrow-right"></i></span></div>
+        </a>
+        <a href="{{ url_for('received_reports', doctor_id=doctor.doctor_id) }}" class="quick-card">
+          <div class="quick-icon green"><i class="fa-solid fa-inbox"></i></div>
+          <div class="quick-copy"><h3>Received Reports</h3><p>Access reports shared with you by other doctors.</p><span>Open inbox <i class="fa-solid fa-arrow-right"></i></span></div>
+        </a>
+      </div>
+    </section>
+  </main>
+  <script>
+    const search = document.getElementById('dashboardSearch');
+    if (search) {
+      search.addEventListener('input', function () {
+        const q = this.value.trim().toLowerCase();
+        document.querySelectorAll('.stat, .quick-card, .activity').forEach(el => {
+          el.style.display = el.innerText.toLowerCase().includes(q) ? '' : 'none';
+        });
+      });
+    }
+  </script>
+</body>
+</html>

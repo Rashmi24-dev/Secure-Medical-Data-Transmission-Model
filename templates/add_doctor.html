@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Doctor | MediSecure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('/static/doctor-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            background-color: #0a0a0a;
+        }
+
+        /* Dark Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.92), rgba(10, 10, 10, 0.88));
+            z-index: -1;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(74, 122, 181, 0.05);
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-100px) rotate(180deg); opacity: 0.8; }
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 40px 20px;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: #4a7ab5;
+        }
+
+        .logo span {
+            color: #4a7ab5;
+        }
+
+        /* Title */
+        .title {
+            color: #e0e0e0;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .title i {
+            margin-right: 12px;
+            color: #4a7ab5;
+        }
+
+        .subtitle {
+            color: rgba(200, 200, 200, 0.85);
+            font-size: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 300;
+        }
+
+        /* Form Card */
+        .form-card {
+            width: 100%;
+            max-width: 620px;
+            background: #111111;
+            backdrop-filter: blur(10px);
+            padding: 45px 40px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: slideUp 0.6s ease;
+            border: 1px solid #222222;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-card .form-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-card .form-icon i {
+            font-size: 48px;
+            color: #4a7ab5;
+            background: #1a2a3a;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid #2a4a6a;
+        }
+
+        .form-card h2 {
+            color: #e0e0e0;
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .form-card .form-subtitle {
+            color: #888888;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Credentials Box */
+        .credentials-box {
+            background: #1a2a3a;
+            border: 2px solid #2a4a7a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            animation: slideDown 0.5s ease;
+        }
+
+        .credentials-box h4 {
+            color: #e0e0e0;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .credentials-box .credential-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: #0e1a2a;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .credentials-box .credential-item i {
+            color: #4a7ab5;
+            width: 20px;
+        }
+
+        .credentials-box .credential-item .label {
+            font-weight: 600;
+            color: #b0b0b0;
+            min-width: 60px;
+        }
+
+        .credentials-box .credential-item .value {
+            color: #e0e0e0;
+            font-family: monospace;
+            background: #1a1a1a;
+            padding: 2px 10px;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+
+        .credentials-box .warning-text {
+            font-size: 13px;
+            color: #f0b060;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #3a2a10;
+            border-radius: 8px;
+        }
+
+        .credentials-box .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .credentials-box .action-buttons .btn-primary {
+            background: #1e3a5f;
+            color: #e0f0ff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: 1px solid #2a4a7a;
+        }
+
+        .credentials-box .action-buttons .btn-primary:hover {
+            background: #2a4a7a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 122, 181, 0.4);
+        }
+
+        .credentials-box .action-buttons .btn-outline {
+            border: 2px solid #2a2a2a;
+            background: #1a1a1a;
+            color: #b0b0b0;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .credentials-box .action-buttons .btn-outline:hover {
+            border-color: #4a7ab5;
+            color: #e0e0e0;
+            background: #1e1e1e;
+        }
+
+        /* Form Groups */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #b0b0b0;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .form-group label i {
+            color: #4a7ab5;
+            font-size: 14px;
+        }
+
+        .form-group label .required {
+            color: #ff6b6b;
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #2a2a2a;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4a7ab5;
+            background: #1e1e1e;
+            box-shadow: 0 0 0 4px rgba(74, 122, 181, 0.15);
+        }
+
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .form-group .input-with-icon {
+            position: relative;
+        }
+
+        .form-group .input-with-icon i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555555;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .form-group .input-with-icon input,
+        .form-group .input-with-icon select {
+            padding-left: 44px;
+        }
+
+        .form-group .input-with-icon input:focus ~ i,
+        .form-group .input-with-icon select:focus ~ i {
+            color: #4a7ab5;
+        }
+
+        /* No Hospitals Message */
+        .no-hospitals {
+            padding: 12px 16px;
+            background: #3a2a10;
+            border: 2px solid #f0b060;
+            border-radius: 10px;
+            color: #f0b060;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .no-hospitals a {
+            color: #4a7ab5;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .no-hospitals i {
+            margin-right: 8px;
+        }
+
+        /* Password Strength */
+        .password-strength {
+            margin-top: 8px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .password-strength .strength-bar {
+            flex: 1;
+            height: 4px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .password-strength .strength-bar .fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .password-strength .strength-text {
+            font-size: 12px;
+            color: #888888;
+            font-weight: 500;
+            min-width: 60px;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e3a5f, #0f2440);
+            color: #e0f0ff;
+            border: 1px solid #2a4a7a;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.4);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #2a4a7a, #1e3a5f);
+            box-shadow: 0 8px 30px rgba(74, 122, 181, 0.5);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit i {
+            font-size: 18px;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-submit .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(224, 240, 255, 0.3);
+            border-top-color: #e0f0ff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .btn-submit.loading .spinner {
+            display: inline-block;
+        }
+
+        .btn-submit.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Back Button */
+        .back {
+            margin-top: 25px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #2563eb;
+        }
+
+        .back:hover {
+            background: #1d4ed8;
+            transform: translateX(-4px);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1a1a1a;
+            padding: 16px 24px;
+            border-radius: 14px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
+            max-width: 400px;
+            border-left: 4px solid #27ae60;
+            border: 1px solid #2a2a2a;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            border-left-color: #dc3545;
+        }
+
+        .toast .toast-icon {
+            font-size: 22px;
+        }
+
+        .toast .toast-icon.success {
+            color: #27ae60;
+        }
+
+        .toast .toast-icon.error {
+            color: #dc3545;
+        }
+
+        .toast .toast-content {
+            flex: 1;
+        }
+
+        .toast .toast-title {
+            font-weight: 600;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .toast .toast-message {
+            color: #888888;
+            font-size: 13px;
+        }
+
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: #555555;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .toast .toast-close:hover {
+            color: #b0b0b0;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            animation: slideDown 0.4s ease;
+        }
+
+        .flash-message.success {
+            background: #1a3a2a;
+            color: #6ee7a0;
+            border-left: 4px solid #6ee7a0;
+        }
+
+        .flash-message.error {
+            background: #3a1a1a;
+            color: #ff8080;
+            border-left: 4px solid #ff8080;
+        }
+
+        .flash-message.info {
+            background: #1a2a3a;
+            color: #6ab0ff;
+            border-left: 4px solid #6ab0ff;
+        }
+
+        .flash-message.warning {
+            background: #3a2a10;
+            color: #f0b060;
+            border-left: 4px solid #f0b060;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-card {
+                padding: 30px 24px 28px;
+                border-radius: 18px;
+            }
+
+            .title {
+                font-size: 28px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .form-card h2 {
+                font-size: 20px;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 11px 14px;
+                font-size: 13px;
+            }
+
+            .btn-submit {
+                padding: 14px;
+                font-size: 15px;
+            }
+
+            .back {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .toast {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+                max-width: unset;
+            }
+
+            .credentials-box .action-buttons {
+                flex-direction: column;
+            }
+
+            .credentials-box .action-buttons .btn-primary,
+            .credentials-box .action-buttons .btn-outline {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 24px 18px 22px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .form-group label {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Particles -->
+    <div class="particles">
+        <div class="particle" style="width:80px;height:80px;top:10%;left:5%;animation-delay:0s;"></div>
+        <div class="particle" style="width:60px;height:60px;top:20%;right:10%;animation-delay:2s;"></div>
+        <div class="particle" style="width:100px;height:100px;bottom:15%;left:8%;animation-delay:4s;"></div>
+        <div class="particle" style="width:50px;height:50px;bottom:25%;right:5%;animation-delay:1s;"></div>
+        <div class="particle" style="width:70px;height:70px;top:50%;left:3%;animation-delay:3s;"></div>
+    </div>
+
+    <div class="container">
+
+        <!-- Logo -->
+        <div class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            Med<span>Secure</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="title">
+            <i class="fa-solid fa-user-doctor"></i>
+            Add New Doctor
+        </h1>
+        <p class="subtitle">
+            Register a doctor for secure medical data management
+        </p>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <div class="form-icon">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h2>Doctor Registration</h2>
+            <p class="form-subtitle">Fill in the details to register a new doctor</p>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'error' %}fa-circle-xmark{% elif category == 'info' %}fa-circle-info{% else %}fa-circle-info{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Credentials Display - Shows after doctor is added -->
+            {% if doctor_credentials and show_credentials %}
+                <div class="credentials-box">
+                    <h4>
+                        <i class="fa-solid fa-key" style="color: #4a7ab5;"></i> 
+                        Doctor Login Credentials
+                    </h4>
+                    <div class="credential-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span class="label">Email:</span>
+                        <span class="value">{{ doctor_credentials.email }}</span>
+                    </div>
+                    <div class="credential-item">
+                        <i class="fa-solid fa-lock"></i>
+                        <span class="label">Password:</span>
+                        <span class="value">{{ doctor_credentials.password }}</span>
+                    </div>
+                    <div class="warning-text">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Please share these credentials with the doctor. They will need this to login.
+                    </div>
+                    <div class="action-buttons">
+                        <a href="{{ url_for('view_doctors') }}" class="btn-primary">
+                            <i class="fa-solid fa-arrow-right"></i> View All Doctors
+                        </a>
+                        <a href="{{ url_for('add_doctor') }}" class="btn-outline">
+                            <i class="fa-solid fa-plus"></i> Add Another Doctor
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <form method="POST" id="doctorForm" action="{{ url_for('add_doctor') }}">
+
+                <!-- Row 1: First Name & Last Name -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-user"></i>
+                            First Name
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" 
+                                   name="first_name" 
+                                   placeholder="Enter first name" 
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-user"></i>
+                            Last Name
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" 
+                                   name="last_name" 
+                                   placeholder="Enter last name" 
+                                   required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Email & Phone -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-envelope"></i>
+                            Email Address
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" 
+                                   name="email" 
+                                   placeholder="Enter email address" 
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-phone"></i>
+                            Phone Number
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" 
+                                   name="phone" 
+                                   placeholder="Enter phone number" 
+                                   required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Specialization -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-stethoscope"></i>
+                            Specialization
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-stethoscope"></i>
+                            <select name="specialization" required>
+                                <option value="">Select Specialization</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="Gynecology">Gynecology</option>
+                                <option value="Dermatology">Dermatology</option>
+                                <option value="Ophthalmology">Ophthalmology</option>
+                                <option value="ENT">ENT</option>
+                                <option value="General Medicine">General Medicine</option>
+                                <option value="Oncology">Oncology</option>
+                                <option value="Psychiatry">Psychiatry</option>
+                                <option value="Radiology">Radiology</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-calendar"></i>
+                            Experience (Years)
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-calendar"></i>
+                            <input type="number" 
+                                   name="experience" 
+                                   placeholder="Years of experience" 
+                                   min="0" 
+                                   max="50" 
+                                   required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hospital - Dynamic from Database -->
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fa-solid fa-hospital"></i>
+                        Hospital
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-hospital"></i>
+                        {% if hospitals %}
+                            <select name="hospital_id" required>
+                                <option value="">Select Hospital</option>
+                                {% for hospital in hospitals %}
+                                    <option value="{{ hospital.hospital_id }}">
+                                        {{ hospital.hospital_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <div class="no-hospitals">
+                                <i class="fa-solid fa-exclamation-triangle"></i>
+                                No hospitals found. Please 
+                                <a href="{{ url_for('add_hospital') }}">add a hospital</a> 
+                                first before registering a doctor.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Row 4: License & Status -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-id-card"></i>
+                            License Number
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-id-card"></i>
+                            <input type="text" 
+                                   name="license_number" 
+                                   placeholder="Enter license number" 
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-circle-check"></i>
+                            Status
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <select name="status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="On Leave">On Leave</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 5: Password & Confirm Password -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-lock"></i>
+                            Password
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" 
+                                   name="password" 
+                                   id="password" 
+                                   placeholder="Create password" 
+                                   required 
+                                   onkeyup="checkPasswordStrength(this.value)">
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar">
+                                <div class="fill" id="strengthFill"></div>
+                            </div>
+                            <span class="strength-text" id="strengthText">Weak</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-lock"></i>
+                            Confirm Password
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" 
+                                   name="confirm_password" 
+                                   id="confirmPassword" 
+                                   placeholder="Confirm password" 
+                                   required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 6: Address (Full Width) -->
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fa-solid fa-address-book"></i>
+                        Address
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <textarea name="address" placeholder="Enter complete address"></textarea>
+                    </div>
+                </div>
+
+                {% if hospitals %}
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span class="spinner"></span>
+                        <span class="btn-text">
+                            <i class="fa-solid fa-user-plus"></i>
+                            Register Doctor
+                        </span>
+                    </button>
+                {% else %}
+                    <a href="{{ url_for('add_hospital') }}" class="btn-submit" style="text-align:center;text-decoration:none;">
+                        <i class="fa-solid fa-hospital"></i>
+                        Add Hospital First
+                    </a>
+                {% endif %}
+
+            </form>
+        </div>
+
+        <!-- Back Button -->
+        <a href="{{ url_for('admin_dashboard') }}" class="back">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check toast-icon success"></i>
+        <div class="toast-content">
+            <div class="toast-title" id="toastTitle">Success</div>
+            <div class="toast-message" id="toastMessage">Action completed successfully</div>
+        </div>
+        <button class="toast-close" onclick="closeToast()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <script>
+        // ===== PASSWORD STRENGTH CHECKER =====
+        function checkPasswordStrength(password) {
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 1;
+            if (password.match(/[a-z]+/)) strength += 1;
+            if (password.match(/[A-Z]+/)) strength += 1;
+            if (password.match(/[0-9]+/)) strength += 1;
+            if (password.match(/[$@#&!]+/)) strength += 1;
+            
+            const percentages = [0, 20, 40, 60, 80, 100];
+            const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+            const colors = ['#dc3545', '#dc3545', '#f39c12', '#f39c12', '#27ae60', '#27ae60'];
+            
+            const index = Math.min(strength, 5);
+            strengthFill.style.width = percentages[index] + '%';
+            strengthFill.style.background = colors[index];
+            strengthText.textContent = labels[index];
+            strengthText.style.color = colors[index];
+        }
+
+        // ===== FORM VALIDATION =====
+        document.getElementById('doctorForm').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                showToast('error', 'Password Mismatch', 'Passwords do not match. Please try again.');
+                return;
+            }
+
+            // Check password strength
+            if (password.length < 6) {
+                e.preventDefault();
+                showToast('error', 'Weak Password', 'Password must be at least 6 characters long.');
+                return;
+            }
+
+            // Show loading state
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
+            }
+        });
+
+        // ===== TOAST NOTIFICATION =====
+        function showToast(type, title, message) {
+            const toast = document.getElementById('toast');
+            const icon = toast.querySelector('.toast-icon');
+            const titleEl = document.getElementById('toastTitle');
+            const messageEl = document.getElementById('toastMessage');
+
+            toast.className = 'toast';
+            icon.className = 'toast-icon';
+
+            if (type === 'success') {
+                icon.className = 'fa-solid fa-circle-check toast-icon success';
+            } else if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-xmark toast-icon error';
+                toast.classList.add('error');
+            } else if (type === 'info') {
+                icon.className = 'fa-solid fa-circle-info toast-icon';
+                toast.classList.add('info');
+            }
+
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            toast.classList.add('show');
+
+            clearTimeout(window.toastTimeout);
+            window.toastTimeout = setTimeout(() => {
+                closeToast();
+            }, 4000);
+        }
+
+        function closeToast() {
+            document.getElementById('toast').classList.remove('show');
+        }
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeToast();
+            }
+        });
+
+        // ===== CLICK OUTSIDE TOAST TO CLOSE =====
+        document.addEventListener('click', function(e) {
+            const toast = document.getElementById('toast');
+            if (toast.classList.contains('show') && !toast.contains(e.target)) {
+                closeToast();
+            }
+        });
+
+        // ===== AUTO-FOCUS ON FIRST FIELD =====
+        document.querySelector('input[name="first_name"]')?.focus();
+
+        // ===== MAKE FUNCTIONS GLOBALLY ACCESSIBLE =====
+        window.checkPasswordStrength = checkPasswordStrength;
+        window.showToast = showToast;
+        window.closeToast = closeToast;
+    </script>
+
+</body>
+</html>

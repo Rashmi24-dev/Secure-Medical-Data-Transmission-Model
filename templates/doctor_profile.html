@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile | Secure Medical Center</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        /* ================= DARK BLUE THEME BACKGROUND ================= */
+        body {
+            background-color: #0b1120;
+            background-image: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.08) 0%, transparent 40%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #e2e8f0;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .profile-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            background: #0f172a;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+            position: relative;
+            min-height: 650px;
+        }
+
+        /* ================= LEFT HERO SECTION ================= */
+        .hero-side {
+            width: 45%;
+            position: relative;
+            background: #0b1120;
+            overflow: hidden;
+        }
+
+        /* The top blue curved background */
+        .hero-curve-top {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 75%;
+            background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+            border-radius: 0 0 60% 0;
+            z-index: 1;
+        }
+
+        /* The bottom blue curved background */
+        .hero-curve-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 45%;
+            background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
+            border-radius: 0 60% 0 0;
+            z-index: 1;
+        }
+
+        /* The Profile Image in a Circle (Made slightly smaller) */
+        .avatar-circle {
+            position: absolute;
+            top: 12%; /* Moved down slightly */
+            left: 10%;
+            width: 80%; /* Reduced from 90% */
+            height: 60%; /* Reduced from 70% */
+            border-radius: 50%;
+            z-index: 2;
+            overflow: hidden;
+            border: 6px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        /* Decorative elements */
+        .decor-circle {
+            position: absolute;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .dc-1 { width: 80px; height: 80px; top: 15%; right: 5%; }
+        .dc-2 { width: 50px; height: 50px; bottom: 30%; left: 10%; }
+
+        /* Text section inside the bottom blue curve */
+        .hero-text {
+            position: absolute;
+            bottom: 8%;
+            left: 10%;
+            z-index: 4;
+            color: white;
+            width: 80%;
+        }
+
+        .hero-text h2 {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.6);
+        }
+
+        .hero-text h2 span { color: #93c5fd; }
+        
+        .hero-text p {
+            font-size: 13px;
+            color: #e2e8f0;
+            line-height: 1.5;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* ================= RIGHT CONTENT SECTION ================= */
+        .content-side {
+            width: 55%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+            background: #0f172a;
+            position: relative;
+            z-index: 4;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 20px;
+        }
+
+        .doctor-name {
+            font-size: 26px;
+            font-weight: 800;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .specialization-badge {
+            font-size: 12px;
+            font-weight: 700;
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            width: fit-content;
+        }
+        .specialization-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: #60a5fa;
+            border-radius: 50%;
+        }
+
+        .hospital-line {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+        .hospital-line i { color: #60a5fa; margin-right: 5px; }
+
+        .quick-stats {
+            display: flex;
+            gap: 10px;
+        }
+        .quick-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #cbd5e1;
+            background: #1e293b;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+        .quick-stat i { color: #60a5fa; }
+
+        .pill-header {
+            display: inline-block;
+            background: #ffffff;
+            color: #1e3a8a;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 6px 20px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .content-box {
+            background: #0b1120;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .bio-text {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .see-more-btn {
+            font-size: 13px;
+            color: #60a5fa;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: none;
+        }
+        .see-more-btn:hover { color: #93c5fd; }
+        .hidden-bio { display: none; margin-top: 10px; }
+
+        .experience-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .exp-icon {
+            width: 45px; height: 45px;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+        }
+        .exp-details h4 { font-size: 15px; color: #f8fafc; }
+        .exp-details p { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+        .exp-meta {
+            font-size: 12px; color: #64748b; margin-top: 6px;
+            display: flex; gap: 15px;
+        }
+        .exp-meta i { color: #60a5fa; }
+
+        .security-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+        }
+        .security-header i {
+            width: 40px; height: 40px;
+            background: rgba(59, 130, 246, 0.1); color: #60a5fa;
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+        }
+        .security-header h4 { color: #f8fafc; font-size: 16px; }
+
+        .key-item {
+            display: flex; align-items: center; gap: 10px;
+            background: #0f172a; padding: 10px; border-radius: 8px;
+            margin-bottom: 8px; border: 1px solid #1e293b;
+        }
+        .key-item i { color: #60a5fa; }
+        .key-item span { font-size: 12px; color: #94a3b8; }
+        .key-item strong { color: #e2e8f0; }
+
+        .download-key-btn {
+            width: 100%; padding: 12px; margin-top: 10px;
+            background: #2563eb; color: white;
+            text-decoration: none; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-weight: 700; font-size: 14px; transition: 0.3s;
+        }
+        .download-key-btn:hover { background: #1d4ed8; }
+
+        .security-warning {
+            display: flex; align-items: flex-start; gap: 8px;
+            margin-top: 12px; padding: 10px;
+            background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 8px; color: #fbbf24; font-size: 11px; line-height: 1.4;
+        }
+
+        /* ================= ACTION BUTTONS ================= */
+        .action-buttons {
+            display: flex; gap: 15px; margin-top: auto;
+        }
+        .btn {
+            flex: 1; padding: 14px; border-radius: 10px;
+            text-align: center; font-weight: 700; text-decoration: none;
+            font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.3s;
+        }
+        
+        .btn-edit, .btn-back { 
+            background: #2563eb; 
+            color: white; 
+            border: 1px solid #2563eb;
+        }
+        
+        .btn-edit:hover, .btn-back:hover { 
+            background: #1d4ed8; 
+            border-color: #1d4ed8;
+        }
+
+        /* Flash Messages */
+        .flash-messages { display: flex; flex-direction: column; gap: 10px; }
+        .flash-message {
+            padding: 12px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .flash-message.success { background: rgba(16, 185, 129, 0.1); color: #34d399; border-left: 4px solid #34d399; }
+        .flash-message.error { background: rgba(239, 68, 68, 0.1); color: #f87171; border-left: 4px solid #f87171; }
+        .flash-message.warning { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border-left: 4px solid #fbbf24; }
+        .flash-message.info { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border-left: 4px solid #60a5fa; }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 900px) {
+            .profile-wrapper { flex-direction: column; }
+            .hero-side { width: 100%; height: 450px; }
+            .avatar-circle { width: 70%; height: 55%; top: 10%; left: 15%; }
+            .hero-curve-bottom { border-radius: 50% 50% 0 0; }
+            .hero-text { text-align: center; left: 50%; transform: translateX(-50%); width: 90%; bottom: 5%; }
+            .content-side { width: 100%; padding: 25px; }
+            .profile-header { flex-direction: column; gap: 15px; }
+            .action-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-wrapper">
+
+    <!-- ================= LEFT HERO SIDE ================= -->
+    <div class="hero-side">
+        
+        <!-- The Curved Backgrounds -->
+        <div class="hero-curve-top"></div>
+        <div class="hero-curve-bottom"></div>
+        
+        <!-- Decorations -->
+        <div class="decor-circle dc-1"></div>
+        <div class="decor-circle dc-2"></div>
+
+        <!-- The Circular Photo -->
+        <div class="avatar-circle">
+            {% if doctor.profile_pic %}
+                <img src="{{ url_for('static', filename='uploads/' + doctor.profile_pic) }}" alt="Doctor Photo">
+            {% else %}
+                <!-- A high-quality placeholder portrait for testing -->
+                <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1000&auto=format&fit=crop" alt="Doctor Placeholder">
+            {% endif %}
+        </div>
+
+        <!-- The Text inside the blue wave -->
+        <div class="hero-text">
+            <h2>Your Health<br>Is Our <span>Priority</span></h2>
+            <p>Dedicated to providing the highest standard of medical care and secure data transmission.</p>
+        </div>
+    </div>
+
+    <!-- ================= RIGHT CONTENT SIDE ================= -->
+    <div class="content-side">
+
+        <!-- Header -->
+        <div class="profile-header">
+            <div>
+                <div class="doctor-name">
+                    Dr. {{ doctor.doctor_name }}
+                    <span class="specialization-badge">{{ doctor.specialization }}</span>
+                </div>
+                <div class="hospital-line">
+                    <i class="fa-solid fa-hospital"></i>
+                    {{ doctor.hospital_name or 'N/A' }}
+                </div>
+            </div>
+            <div class="quick-stats">
+                <div class="quick-stat">
+                    <i class="fa-solid fa-clock"></i> Full-time
+                </div>
+                <div class="quick-stat">
+                    <i class="fa-solid fa-stethoscope"></i> {{ doctor.experience or 0 }} Years Exp
+                </div>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'warning' %}fa-triangle-exclamation{% elif category == 'info' %}fa-circle-info{% else %}fa-circle-xmark{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- About Section -->
+        <div class="content-box">
+            <div class="pill-header">About Us</div>
+            <p class="bio-text">
+                With a seasoned career spanning {{ doctor.experience or 0 }} years, our {{ doctor.specialization }} specialist brings a wealth of experience to the field.
+            </p>
+            <div class="hidden-bio" id="hiddenBio">
+                <p class="bio-text" style="margin-top: 10px;">
+                    Dedicated to providing the highest standard of care, they specialize in diagnosing, treating, and managing a wide range of medical conditions. Their commitment to patient well-being and continuous medical education ensures they stay at the forefront of modern healthcare practices.
+                </p>
+            </div>
+            <button class="see-more-btn" id="seeMoreBtn" onclick="toggleBio()">
+                <span id="seeMoreText">See More</span>
+                <i class="fa-solid fa-chevron-down" id="seeMoreIcon"></i>
+            </button>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="content-box">
+            <div class="pill-header">Our Service</div>
+            <div class="experience-item">
+                <div class="exp-icon"><i class="fa-solid fa-hospital"></i></div>
+                <div class="exp-details">
+                    <h4>{{ doctor.hospital_name or 'Secure Hospital' }}</h4>
+                    <p>{{ doctor.specialization }} — Full-time</p>
+                    <div class="exp-meta">
+                        <span><i class="fa-solid fa-calendar"></i> Dec 2022 - Present</span>
+                        <span><i class="fa-solid fa-location-dot"></i> Secure Medical Center</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Section -->
+        <div class="content-box">
+            <div class="pill-header">Security & Encryption</div>
+            <div class="security-header">
+                <i class="fa-solid fa-lock"></i>
+                <h4>RSA Security Keys</h4>
+            </div>
+            <p class="bio-text" style="margin-bottom: 15px;">
+                Your account has a unique RSA key pair for secure medical data transmission. The public key is used by other doctors to encrypt information for you. Your private key is required to decrypt received medical reports.
+            </p>
+            
+            <div class="key-item">
+                <i class="fa-solid fa-key"></i>
+                <span><strong>Public Key:</strong> Generated and stored securely.</span>
+            </div>
+            <div class="key-item">
+                <i class="fa-solid fa-lock"></i>
+                <span><strong>Private Key:</strong> Generated and available for download.</span>
+            </div>
+
+            <a href="{{ url_for('download_private_key', doctor_id=doctor.doctor_id) }}" class="download-key-btn" onclick="return confirm('Download your private RSA key?\n\nKeep this file safe and never share it with anyone.');">
+                <i class="fa-solid fa-download"></i> Download My Private Key
+            </a>
+
+            <div class="security-warning">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span><strong>Important:</strong> Keep your private key confidential. You will need this key to decrypt secure medical reports received from another doctor.</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{{ url_for('edit_doctor_profile', doctor_id=doctor.doctor_id) }}" class="btn btn-edit">
+                <i class="fa-solid fa-user-pen"></i> Edit Profile
+            </a>
+            <a href="{{ url_for('doctor_dashboard', doctor_id=doctor.doctor_id) }}" class="btn btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+    function toggleBio() {
+        const hiddenBio = document.getElementById("hiddenBio");
+        const seeMoreText = document.getElementById("seeMoreText");
+        const seeMoreIcon = document.getElementById("seeMoreIcon");
+
+        if (hiddenBio.style.display === "none" || hiddenBio.style.display === "") {
+            hiddenBio.style.display = "block";
+            seeMoreText.textContent = "See Less";
+            seeMoreIcon.classList.remove("fa-chevron-down");
+            seeMoreIcon.classList.add("fa-chevron-up");
+        } else {
+            hiddenBio.style.display = "none";
+            seeMoreText.textContent = "See More";
+            seeMoreIcon.classList.remove("fa-chevron-up");
+            seeMoreIcon.classList.add("fa-chevron-down");
+        }
+    }
+</script>
+
+</body>
+</html>

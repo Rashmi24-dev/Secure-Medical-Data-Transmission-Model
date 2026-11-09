@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | MediSecure</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #121212; color: #e5e7eb; padding: 20px; min-height: 100vh; }
+        .container { max-width: 1400px; margin: auto; }
+
+        header {
+            background: #1f1f1f; padding: 18px 30px; display: flex;
+            justify-content: space-between; align-items: center;
+            border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,.3);
+            flex-wrap: wrap; gap: 10px; margin-bottom: 25px;
+        }
+        header h2 { font-size: 26px; font-weight: 600; display: flex; align-items: center; gap: 10px; color: #e5e7eb; }
+        header h2 i { color: #3b82f6; }
+        header a {
+            color: white; text-decoration: none; font-size: 14px; background: #3b82f6;
+            padding: 10px 18px; border-radius: 8px; transition: .3s; font-weight: 500;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        header a:hover { background: #2563eb; transform: translateY(-1px); }
+
+        .subtitle { color: #94a3b8; margin-bottom: 25px; font-size: 14px; }
+        .subtitle i { color: #3b82f6; margin-right: 8px; }
+
+        .flash-messages { margin-bottom: 20px; }
+        .flash-message {
+            padding: 13px 16px; border-radius: 10px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px; font-weight: 500;
+        }
+        .flash-message.success { background: #065f46; color: #34d399; border-left: 4px solid #34d399; }
+        .flash-message.error { background: #7f1d1d; color: #fca5a5; border-left: 4px solid #fca5a5; }
+        .flash-message.warning { background: #78350f; color: #fbbf24; border-left: 4px solid #fbbf24; }
+        .flash-message.info { background: #1e3a5f; color: #60a5fa; border-left: 4px solid #60a5fa; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card {
+            background: #1f1f1f; border-radius: 12px; padding: 20px; text-align: center;
+            border: 1px solid #2d3748; transition: 0.3s;
+        }
+        .stat-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        .stat-card .number { font-size: 28px; font-weight: 700; color: #fff; display: block; }
+        .stat-card .label { font-size: 13px; color: #94a3b8; margin-top: 5px; display: block; }
+        .stat-card .icon { font-size: 20px; margin-bottom: 8px; display: block; }
+        .stat-card.total .icon { color: #3b82f6; }
+        .stat-card.sent .icon { color: #34d399; }
+        .stat-card.received .icon { color: #60a5fa; }
+        .stat-card.pending .icon { color: #fbbf24; }
+        .stat-card.failed .icon { color: #ef4444; }
+
+        .search-section { background: #1f1f1f; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #2d3748; }
+        .search-form { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        .search-form input {
+            flex: 1; min-width: 200px; padding: 12px 16px; background: #2d3748;
+            border: 1px solid #374151; border-radius: 10px; color: #e5e7eb; font-size: 14px; outline: none; transition: .3s;
+        }
+        .search-form input:focus { border-color: #3b82f6; }
+        .search-form input::placeholder { color: #94a3b8; }
+        .search-form button {
+            padding: 12px 25px; background: #3b82f6; color: white; border: none;
+            border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .search-form button:hover { background: #2563eb; }
+        .clear-btn {
+            padding: 12px 25px; background: #6b7280; color: white; border: none;
+            border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .clear-btn:hover { background: #4b5563; }
+
+        .table-card { background: #1f1f1f; border-radius: 12px; overflow: hidden; border: 1px solid #2d3748; }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: #2d3748; }
+        th {
+            padding: 14px 16px; text-align: left; font-size: 12px; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #94a3b8; font-weight: 600; border-bottom: 2px solid #374151;
+        }
+        td { padding: 14px 16px; border-bottom: 1px solid #2d3748; font-size: 14px; color: #e5e7eb; }
+        tbody tr:hover { background: #2d3748; }
+        tbody tr:last-child td { border-bottom: none; }
+
+        .status-badge { display: inline-block; padding: 4px 14px; border-radius: 30px; font-size: 12px; font-weight: 600; }
+        .status-Sent { background: #064e3b; color: #34d399; }
+        .status-Uploaded { background: #78350f; color: #fbbf24; }
+        .status-Pending { background: #78350f; color: #fbbf24; }
+        .status-Failed { background: #7f1d1d; color: #fca5a5; }
+
+        .action-cell { display: flex; gap: 6px; flex-wrap: wrap; }
+        .action-btn {
+            padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px;
+            font-weight: 500; display: inline-flex; align-items: center; gap: 5px;
+            border: none; cursor: pointer;
+        }
+        .action-btn.view { background: #3b82f6; color: white; }
+        .action-btn.view:hover { background: #2563eb; }
+        .action-btn.download { background: #f59e0b; color: white; }
+        .action-btn.download:hover { background: #d97706; }
+        .action-btn.delete { background: #dc2626; color: white; }
+        .action-btn.delete:hover { background: #b91c1c; }
+
+        .empty-state { text-align: center; padding: 50px 20px; color: #94a3b8; }
+        .empty-state i { font-size: 50px; color: #2d3748; margin-bottom: 15px; display: block; }
+        .empty-state h3 { color: #e5e7eb; margin-bottom: 8px; font-size: 20px; }
+
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 9999; justify-content: center; align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: #1f1f1f; border-radius: 15px; padding: 30px; max-width: 400px;
+            width: 90%; text-align: center; border: 1px solid #333;
+        }
+        .modal-box h3 { color: #fff; margin-bottom: 10px; }
+        .modal-box p { color: #94a3b8; margin-bottom: 20px; }
+        .modal-box .modal-actions { display: flex; gap: 10px; justify-content: center; }
+        .modal-box .modal-actions button {
+            padding: 10px 25px; border-radius: 8px; border: none;
+            font-weight: 600; cursor: pointer; font-size: 14px;
+        }
+        .modal-box .modal-actions .confirm-delete { background: #dc2626; color: white; }
+        .modal-box .modal-actions .confirm-delete:hover { background: #b91c1c; }
+        .modal-box .modal-actions .cancel-delete { background: #374151; color: white; }
+        .modal-box .modal-actions .cancel-delete:hover { background: #4b5563; }
+        .modal-box .warning-icon { font-size: 48px; color: #dc2626; margin-bottom: 15px; }
+
+        @media (max-width: 992px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) {
+            header { flex-direction: column; text-align: center; padding: 15px; }
+            header h2 { font-size: 22px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .search-form { flex-direction: column; }
+            .search-form input { width: 100%; min-width: unset; }
+            .search-form button, .clear-btn { width: 100%; justify-content: center; }
+            .action-cell { flex-direction: column; align-items: center; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            th, td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h2><i class="fa-solid fa-file-alt"></i> Reports</h2>
+        <a href="{{ url_for('admin_dashboard') }}">
+            <i class="fa fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </header>
+
+    <div class="subtitle">
+        <i class="fa-solid fa-chart-line"></i>
+        View and manage all medical reports and transmissions
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        <i class="fa-solid
+                            {% if category == 'success' %}fa-circle-check
+                            {% elif category == 'warning' %}fa-triangle-exclamation
+                            {% elif category == 'error' %}fa-circle-xmark
+                            {% else %}fa-circle-info{% endif %}
+                        "></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="stats-grid">
+        <div class="stat-card total">
+            <span class="icon"><i class="fa-solid fa-files"></i></span>
+            <span class="number">{{ total_reports or 0 }}</span>
+            <span class="label">Total Reports</span>
+        </div>
+        <div class="stat-card sent">
+            <span class="icon"><i class="fa-solid fa-paper-plane"></i></span>
+            <span class="number">{{ sent_count or 0 }}</span>
+            <span class="label">Sent</span>
+        </div>
+        <div class="stat-card received">
+            <span class="icon"><i class="fa-solid fa-inbox"></i></span>
+            <span class="number">{{ received_count or 0 }}</span>
+            <span class="label">Received</span>
+        </div>
+        <div class="stat-card pending">
+            <span class="icon"><i class="fa-solid fa-clock"></i></span>
+            <span class="number">{{ pending_count or 0 }}</span>
+            <span class="label">Pending</span>
+        </div>
+        <div class="stat-card failed">
+            <span class="icon"><i class="fa-solid fa-times-circle"></i></span>
+            <span class="number">{{ failed_count or 0 }}</span>
+            <span class="label">Failed</span>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search by patient, hospital, or report ID..." value="{{ search_query or '' }}">
+            <button type="submit">
+                <i class="fa-solid fa-search"></i> Search
+            </button>
+            {% if search_query %}
+                <a href="{{ url_for('reports') }}" class="clear-btn">
+                    <i class="fa-solid fa-times"></i> Clear
+                </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="table-card">
+        {% if reports %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Report ID</th>
+                    <th>Patient Name</th>
+                    <th>From Hospital</th>
+                    <th>To Hospital</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td><strong>#{{ "%04d"|format(report.report_id) }}</strong></td>
+                    <td>{{ report.patient_name or 'N/A' }}</td>
+                    <td>{{ report.from_hospital or 'N/A' }}</td>
+                    <td>{{ report.to_hospital or 'N/A' }}</td>
+                    <td>{{ report.sent_date or report.upload_date or 'N/A' }}</td>
+                    <td>
+                        <span class="status-badge status-{{ report.status }}">
+                            {{ report.status or 'Uploaded' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-cell">
+                            <a href="{{ url_for('admin_view_report', report_id=report.report_id) }}" class="action-btn view">
+                                <i class="fa-solid fa-eye"></i> View
+                            </a>
+                            <a href="{{ url_for('download_report', report_id=report.report_id) }}" class="action-btn download">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                            <button onclick="confirmDelete({{ report.report_id }}, '{{ report.patient_name }}')" class="action-btn delete">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-file-circle-exclamation"></i>
+            <h3>No reports found</h3>
+            <p>No medical reports match your search criteria.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+        <div class="warning-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3>Delete Report?</h3>
+        <p id="deleteMessage">Are you sure you want to delete this report? This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button onclick="closeDeleteModal()" class="cancel-delete">
+                <i class="fa-solid fa-times"></i> Cancel
+            </button>
+            <button onclick="proceedDelete()" class="confirm-delete">
+                <i class="fa-solid fa-trash"></i> Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let deleteReportId = null;
+
+    function confirmDelete(reportId, patientName) {
+        deleteReportId = reportId;
+        document.getElementById('deleteMessage').textContent =
+            'Are you sure you want to delete the report for patient "' + (patientName || 'Unknown') + '"? This action cannot be undone.';
+        document.getElementById('deleteModal').classList.add('active');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('active');
+        deleteReportId = null;
+    }
+
+    function proceedDelete() {
+        if (deleteReportId) {
+            window.location.href = "{{ url_for('delete_report', report_id=0) }}".replace('0', deleteReportId);
+        }
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target === modal) {
+            closeDeleteModal();
+        }
+    }
+</script>
+
+</body>
+</html>

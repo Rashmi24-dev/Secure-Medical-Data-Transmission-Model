@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sent Reports | MediSecure</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter', sans-serif;
+}
+
+body{
+background:#121212;
+color:#e5e7eb;
+min-height:100vh;
+padding:20px;
+}
+
+header{
+background:#1f1f1f;
+color:#e5e7eb;
+padding:18px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,.3);
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:25px;
+}
+
+header h2{
+font-size:26px;
+font-weight:600;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+header h2 i{
+color:#3b82f6;
+}
+
+header a{
+color:white;
+text-decoration:none;
+font-size:14px;
+background:#3b82f6;
+padding:10px 18px;
+border-radius:8px;
+transition:.3s;
+font-weight:500;
+display:inline-flex;
+align-items:center;
+gap:8px;
+}
+
+header a:hover{
+background:#2563eb;
+transform:translateY(-1px);
+}
+
+.container{
+width:95%;
+max-width:1400px;
+margin:0 auto;
+}
+
+.top-card{
+background:#1f1f1f;
+padding:25px 30px;
+border-radius:12px;
+box-shadow:0 8px 25px rgba(0,0,0,.2);
+margin-bottom:25px;
+border:1px solid #2d3748;
+}
+
+.top-card h2{
+color:#60a5fa;
+margin-bottom:8px;
+font-size:24px;
+font-weight:600;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.top-card p{
+color:#94a3b8;
+font-size:14px;
+}
+
+.flash-messages { margin-bottom: 20px; }
+
+.flash-message {
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    animation: slideDown 0.4s ease;
+}
+
+.flash-message.success { background: #065f46; color: #34d399; border-left: 4px solid #34d399; }
+.flash-message.error { background: #7f1d1d; color: #fca5a5; border-left: 4px solid #fca5a5; }
+.flash-message.warning { background: #78350f; color: #fbbf24; border-left: 4px solid #fbbf24; }
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.search-box{
+display:flex;
+gap:15px;
+margin-bottom:25px;
+flex-wrap:wrap;
+}
+
+.search-box input{
+flex:1;
+min-width:200px;
+padding:12px 16px;
+background:#2d3748;
+border:1px solid #374151;
+border-radius:10px;
+color:#e5e7eb;
+font-size:14px;
+outline:none;
+transition:.3s;
+}
+
+.search-box input:focus{
+border-color:#3b82f6;
+box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.search-box input::placeholder{ color:#94a3b8; }
+
+.search-box select{
+padding:12px 16px;
+border-radius:10px;
+background:#2d3748;
+border:1px solid #374151;
+color:#e5e7eb;
+font-size:14px;
+outline:none;
+min-width:150px;
+transition:.3s;
+cursor:pointer;
+}
+
+.search-box select:focus{
+border-color:#3b82f6;
+box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.search-box select option{
+background:#1f1f1f;
+color:#e5e7eb;
+}
+
+.search-box button{
+padding:12px 25px;
+background:#3b82f6;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+font-size:14px;
+transition:.3s;
+display:inline-flex;
+align-items:center;
+gap:8px;
+}
+
+.search-box button:hover{
+background:#2563eb;
+transform:translateY(-1px);
+}
+
+.table-card{
+background:#1f1f1f;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 8px 20px rgba(0,0,0,.2);
+border:1px solid #2d3748;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+thead{
+background:#2d3748;
+}
+
+th{
+padding:14px 16px;
+text-align:center;
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:0.5px;
+color:#94a3b8;
+font-weight:600;
+border-bottom:2px solid #374151;
+}
+
+td{
+padding:14px 16px;
+text-align:center;
+border-bottom:1px solid #2d3748;
+font-size:14px;
+color:#e5e7eb;
+}
+
+tbody tr:hover{ background:#2d3748; transition:.2s; }
+tbody tr:last-child td{ border-bottom:none; }
+
+/* Status Badges */
+.pending{
+background:#78350f;
+color:#fbbf24;
+padding:4px 14px;
+border-radius:30px;
+font-weight:600;
+display:inline-block;
+font-size:12px;
+}
+
+.delivered{
+background:#064e3b;
+color:#34d399;
+padding:4px 14px;
+border-radius:30px;
+font-weight:600;
+display:inline-block;
+font-size:12px;
+}
+
+.seen{
+background:#4c1d95;
+color:#c4b5fd;
+padding:4px 14px;
+border-radius:30px;
+font-weight:600;
+display:inline-block;
+font-size:12px;
+}
+
+.action-cell {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.view-btn{
+background:#3b82f6;
+color:white;
+padding:6px 14px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+font-weight:500;
+transition:.3s;
+display:inline-flex;
+align-items:center;
+gap:5px;
+border:none;
+cursor:pointer;
+}
+
+.view-btn:hover{
+background:#2563eb;
+transform:translateY(-1px);
+}
+
+.delete-btn{
+background:#dc2626;
+color:white;
+padding:6px 14px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+font-weight:500;
+transition:.3s;
+display:inline-flex;
+align-items:center;
+gap:5px;
+border:none;
+cursor:pointer;
+}
+
+.delete-btn:hover{
+background:#b91c1c;
+transform:translateY(-1px);
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+.modal-overlay.active { display: flex; }
+.modal-box {
+    background: #1f1f1f;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    border: 1px solid #333;
+}
+.modal-box h3 { color: #fff; margin-bottom: 10px; }
+.modal-box p { color: #94a3b8; margin-bottom: 20px; }
+.modal-box .modal-actions { display: flex; gap: 10px; justify-content: center; }
+.modal-box .modal-actions button { padding: 10px 25px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 14px; }
+.modal-box .modal-actions .confirm-delete { background: #dc2626; color: white; }
+.modal-box .modal-actions .confirm-delete:hover { background: #b91c1c; }
+.modal-box .modal-actions .cancel-delete { background: #374151; color: white; }
+.modal-box .modal-actions .cancel-delete:hover { background: #4b5563; }
+.modal-box .warning-icon { font-size: 48px; color: #dc2626; margin-bottom: 15px; }
+
+.footer{
+margin-top:20px;
+text-align:right;
+color:#94a3b8;
+font-size:16px;
+padding:15px 20px;
+background:#1f1f1f;
+border-radius:12px;
+border:1px solid #2d3748;
+}
+
+.footer span{ color:#60a5fa; font-weight:700; }
+
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: #94a3b8;
+}
+
+.empty-state i {
+    font-size: 50px;
+    color: #2d3748;
+    margin-bottom: 15px;
+}
+
+.empty-state h3 {
+    color: #e5e7eb;
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+
+.empty-state p {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    header { flex-direction: column; text-align: center; padding: 15px; }
+    header h2 { font-size: 22px; }
+    .container { width: 98%; }
+    table { font-size: 12px; }
+    th, td { padding: 10px 8px; }
+    .search-box { flex-direction: column; }
+    .search-box input, .search-box select, .search-box button { width: 100%; min-width: unset; justify-content: center; }
+    .action-cell { flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 480px) {
+    table { font-size: 11px; min-width: 600px; }
+    .view-btn, .delete-btn { font-size: 11px; padding: 4px 10px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2><i class="fa-solid fa-clock-rotate-left"></i> Sent Reports</h2>
+<a href="{{ url_for('doctor_dashboard', doctor_id=doctor_id) }}">
+<i class="fa fa-arrow-left"></i> Back to Dashboard
+</a>
+</header>
+
+<div class="container">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-xmark{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<div class="top-card">
+<h2><i class="fa-solid fa-paper-plane"></i> Transmission History</h2>
+<p>View all securely transmitted medical reports and their current delivery status.</p>
+</div>
+
+<form method="GET" action="{{ url_for('sent_reports', doctor_id=doctor_id) }}" class="search-box">
+<input type="text" name="search" placeholder="Search Patient Name / Report ID" value="{{ search_query or '' }}">
+
+<select name="status">
+<option value="all" {% if status_filter == 'all' or not status_filter %}selected{% endif %}>All Status</option>
+<option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+<option value="delivered" {% if status_filter == 'delivered' %}selected{% endif %}>Delivered</option>
+<option value="seen" {% if status_filter == 'seen' %}selected{% endif %}>Seen</option>
+</select>
+
+<button type="submit">
+<i class="fa-solid fa-search"></i> Search
+</button>
+</form>
+
+<div class="table-card">
+<table>
+<thead>
+<tr>
+<th>Report ID</th>
+<th>Patient Name</th>
+<th>Receiver Doctor</th>
+<th>Hospital</th>
+<th>Report Type</th>
+<th>Date</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+    {% if reports %}
+        {% for report in reports %}
+            <tr>
+                <td><strong>#{{ "%04d"|format(report.report_id) }}</strong></td>
+                <td>{{ report.patient_name or 'N/A' }}</td>
+                <td>{{ report.receiver_name or 'N/A' }}</td>
+                <td>{{ report.to_hospital or 'N/A' }}</td>
+                <td>{{ report.report_type or 'General' }}</td>
+                <td>{{ report.sent_date or 'N/A' }}</td>
+
+                <td>
+                    {% set s = (report.status or 'Pending')|lower %}
+                    <span class="
+                        {% if s == 'seen' %}seen
+                        {% elif s == 'delivered' %}delivered
+                        {% elif s == 'pending' %}pending
+                        {% else %}pending{% endif %}
+                    ">
+                        {% if s == 'seen' %}Seen
+                        {% elif s == 'delivered' %}Delivered
+                        {% elif s == 'pending' %}Pending
+                        {% else %}{{ report.status }}{% endif %}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="action-cell">
+                        <a href="{{ url_for('view_report', report_id=report.report_id) }}" class="view-btn">
+                            <i class="fa-solid fa-eye"></i> View
+                        </a>
+                        <button onclick="confirmDelete({{ report.report_id }}, '{{ report.patient_name }}')" class="delete-btn">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="8">
+                <div class="empty-state">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <h3>No reports sent yet</h3>
+                    <p>When you send reports to other doctors, they will appear here.</p>
+                </div>
+            </td>
+        </tr>
+    {% endif %}
+</tbody>
+</table>
+</div>
+
+<div class="footer">
+<b>Total Sent Reports : <span>{{ reports|length }}</span></b>
+</div>
+
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+        <div class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3>Delete Sent Report?</h3>
+        <p id="deleteMessage">Are you sure you want to delete this sent report? This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button onclick="closeDeleteModal()" class="cancel-delete"><i class="fa-solid fa-times"></i> Cancel</button>
+            <button onclick="proceedDelete()" class="confirm-delete"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let deleteReportId = null;
+
+    function confirmDelete(reportId, patientName) {
+        deleteReportId = reportId;
+        document.getElementById('deleteMessage').textContent =
+            'Are you sure you want to delete the sent report for patient "' + patientName + '"? This action cannot be undone.';
+        document.getElementById('deleteModal').classList.add('active');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('active');
+        deleteReportId = null;
+    }
+
+    function proceedDelete() {
+        if (deleteReportId) {
+            window.location.href = "{{ url_for('delete_report', report_id=0) }}".replace('0', deleteReportId);
+        }
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target === modal) closeDeleteModal();
+    }
+</script>
+
+</body>
+</html>

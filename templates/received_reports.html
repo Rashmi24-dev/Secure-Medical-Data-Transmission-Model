@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Received Reports | MediSecure</title>
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #121212;
+            color: #e5e7eb;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1f1f1f;
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid #2d3748;
+        }
+
+        .top-bar h2 {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-bar h2 i {
+            color: #3b82f6;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back-btn {
+            color: white;
+            background: #3b82f6;
+            padding: 9px 17px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .back-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           MAIN CARD
+        ========================= */
+
+        .card {
+            background: #1f1f1f;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #2d3748;
+            overflow: hidden;
+        }
+
+        /* =========================
+           FLASH MESSAGES
+        ========================= */
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 13px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .flash-message.success {
+            background: #065f46;
+            color: #34d399;
+            border-left: 4px solid #34d399;
+        }
+
+        .flash-message.error {
+            background: #7f1d1d;
+            color: #fca5a5;
+            border-left: 4px solid #fca5a5;
+        }
+
+        .flash-message.warning {
+            background: #78350f;
+            color: #fbbf24;
+            border-left: 4px solid #fbbf24;
+        }
+
+        .flash-message.info {
+            background: #1e3a5f;
+            color: #60a5fa;
+            border-left: 4px solid #60a5fa;
+        }
+
+        /* =========================
+           STATISTICS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: #2d3748;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #374151;
+            transition: 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .stat-box .number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+
+        .stat-box .label {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #2d3748;
+            color: #94a3b8;
+            padding: 14px 15px;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            border-bottom: 2px solid #374151;
+        }
+
+        td {
+            padding: 14px 15px;
+            border-bottom: 1px solid #2d3748;
+            text-align: left;
+            color: #e5e7eb;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #2d3748;
+        }
+
+        /* =========================
+           REPORT ID
+        ========================= */
+
+        .report-id {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        /* =========================
+           PATIENT
+        ========================= */
+
+        .patient-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* =========================
+           SENDER
+        ========================= */
+
+        .sender-name {
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        /* =========================
+           IMAGE BADGE
+        ========================= */
+
+        .image-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 9px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .image-badge.available {
+            background: #064e3b;
+            color: #34d399;
+        }
+
+        .image-badge.none {
+            background: #374151;
+            color: #94a3b8;
+        }
+
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 7px 11px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-decrypt {
+            background: #22c55e;
+        }
+
+        .btn-decrypt:hover {
+            background: #16a34a;
+        }
+
+        .btn-view {
+            background: #3b82f6;
+        }
+
+        .btn-view:hover {
+            background: #2563eb;
+        }
+
+        /* =========================
+           DECRYPTED BADGE
+        ========================= */
+
+        .decrypted-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #1e3a5f;
+            color: #60a5fa;
+            cursor: default;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 55px;
+            color: #374151;
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            color: #e5e7eb;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .empty-state p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* =========================
+           SECURITY INFORMATION
+        ========================= */
+
+        .security-info {
+            margin-top: 25px;
+            padding: 18px;
+            background: #172033;
+            border: 1px solid #263957;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .security-info i {
+            color: #60a5fa;
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .security-info h4 {
+            color: #ffffff;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .security-info p {
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .top-bar h2 {
+                justify-content: center;
+            }
+
+            .back-btn {
+                justify-content: center;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .top-bar h2 {
+                font-size: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- =========================
+         TOP BAR
+    ========================== -->
+
+    <div class="top-bar">
+
+        <h2>
+            <i class="fa-solid fa-inbox"></i>
+            Received Reports
+        </h2>
+
+        <a
+            href="{{ url_for('doctor_dashboard', doctor_id=doctor_id) }}"
+            class="back-btn"
+        >
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         MAIN CARD
+    ========================== -->
+
+    <div class="card">
+
+        <!-- =========================
+             FLASH MESSAGES
+        ========================== -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fa-solid
+                                {% if category == 'success' %}
+                                    fa-circle-check
+                                {% elif category == 'warning' %}
+                                    fa-triangle-exclamation
+                                {% elif category == 'info' %}
+                                    fa-circle-info
+                                {% else %}
+                                    fa-circle-xmark
+                                {% endif %}
+                            "></i>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
+
+        <div class="stats">
+
+            <!-- TOTAL RECEIVED -->
+            <div class="stat-box">
+                <div class="number">{{ reports|length }}</div>
+                <span class="label">Total Received</span>
+            </div>
+
+            <!-- NEW REPORTS (Delivered, not yet seen) -->
+            <div class="stat-box">
+                <div class="number">
+                    {{ reports|selectattr('status', 'equalto', 'Delivered')|list|length }}
+                </div>
+                <span class="label">New Reports</span>
+            </div>
+
+            <!-- DECRYPTED (Seen or Decrypted) -->
+            <div class="stat-box">
+                <div class="number">
+                    {{ (reports|selectattr('status', 'equalto', 'Seen')|list|length) + (reports|selectattr('status', 'equalto', 'Decrypted')|list|length) }}
+                </div>
+                <span class="label">Decrypted</span>
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             REPORT TABLE
+        ========================== -->
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Report ID</th>
+                        <th>Patient</th>
+                        <th>From Doctor</th>
+                        <th>From Hospital</th>
+                        <th>Date Received</th>
+                        <th>Image</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% if reports %}
+
+                        {% for report in reports %}
+
+                            <tr>
+
+                                <!-- REPORT ID -->
+                                <td>
+                                    <span class="report-id">
+                                        #{{ "%04d"|format(report.report_id) }}
+                                    </span>
+                                </td>
+
+                                <!-- PATIENT -->
+                                <td>
+                                    <span class="patient-name">
+                                        {{ report.patient_name or "N/A" }}
+                                    </span>
+                                </td>
+
+                                <!-- SENDER -->
+                                <td>
+                                    <span class="sender-name">
+                                        <i class="fa-solid fa-user-doctor"></i>
+                                        Dr. {{ report.sender_name or "N/A" }}
+                                    </span>
+                                </td>
+
+                                <!-- HOSPITAL -->
+                                <td>
+                                    {{ report.from_hospital or "N/A" }}
+                                </td>
+
+                                <!-- DATE -->
+                                <td>
+                                    {{ report.sent_date or "N/A" }}
+                                </td>
+
+                                <!-- IMAGE -->
+                                <td>
+                                    {% if report.stego_image %}
+                                        <span class="image-badge available">
+                                            <i class="fa-solid fa-image"></i>
+                                            Available
+                                        </span>
+                                    {% else %}
+                                        <span class="image-badge none">
+                                            <i class="fa-solid fa-image"></i>
+                                            No Image
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- ACTION -->
+                                <td>
+                                    {% set s = (report.status or '')|lower %}
+
+                                    {% if s == 'decrypted' or s == 'seen' %}
+                                        <!-- View Button (Allows infinite viewing without key) -->
+                                        <a
+                                            href="{{ url_for('decrypt_report', doctor_id=doctor_id) }}?report_id={{ report.report_id }}"
+                                            class="btn btn-view"
+                                            title="View this decrypted report"
+                                        >
+                                            <i class="fa-solid fa-eye"></i>
+                                            View
+                                        </a>
+                                    {% else %}
+                                        <!-- Decrypt Button (Requires key) -->
+                                        <a
+                                            href="{{ url_for('decrypt_report', doctor_id=doctor_id) }}?report_id={{ report.report_id }}"
+                                            class="btn btn-decrypt"
+                                            title="Decrypt this report"
+                                        >
+                                            <i class="fa-solid fa-lock"></i>
+                                            Decrypt
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <!-- NO REPORTS -->
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-inbox"></i>
+                                    <h3>No Reports Received Yet</h3>
+                                    <p>
+                                        When another doctor sends you a
+                                        secure medical report, it will
+                                        appear here.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+
+                    {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =========================
+             SECURITY INFORMATION
+        ========================== -->
+
+        <div class="security-info">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <div>
+                <h4>Secure Medical Data</h4>
+                <p>
+                    Received reports are protected using
+                    AES-256 encryption and RSA-2048 key protection.
+                    Reports containing X-ray, MRI or CT images
+                    may additionally use DWT steganography.
+                    SHA-256 verification is performed after
+                    decryption to detect data tampering.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

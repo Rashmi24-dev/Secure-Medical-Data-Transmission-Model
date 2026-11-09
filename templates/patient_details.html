@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Details | MediSecure</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f4c81,#1b6ca8,#4bb3c1);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.card{
+background:white;
+width:700px;
+padding:40px;
+border-radius:20px;
+box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+h1{
+text-align:center;
+color:#0b5ed7;
+margin-bottom:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:30px;
+}
+
+td{
+padding:15px;
+border-bottom:1px solid #ddd;
+font-size:16px;
+}
+
+td:first-child{
+font-weight:bold;
+width:220px;
+color:#0b5ed7;
+}
+
+.btn{
+display:block;
+width:100%;
+padding:15px;
+background:#0b5ed7;
+color:white;
+text-align:center;
+text-decoration:none;
+border-radius:10px;
+font-size:18px;
+font-weight:600;
+}
+
+.btn:hover{
+background:#084298;
+}
+
+.back{
+display:block;
+margin-top:20px;
+text-align:center;
+text-decoration:none;
+color:#0b5ed7;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1><i class="fa-solid fa-user"></i> Patient Details</h1>
+
+<table>
+
+<tr>
+<td>Patient ID</td>
+<td>PAT001</td>
+</tr>
+
+<tr>
+<td>Patient Name</td>
+<td>Rahul Sharma</td>
+</tr>
+
+<tr>
+<td>Age</td>
+<td>45</td>
+</tr>
+
+<tr>
+<td>Gender</td>
+<td>Male</td>
+</tr>
+
+<tr>
+<td>Blood Group</td>
+<td>O+</td>
+</tr>
+
+<tr>
+<td>Phone</td>
+<td>9876543210</td>
+</tr>
+
+</table>
+
+<a href="{{ url_for('upload_report') }}" class="btn">
+Continue to Upload Report
+</a>
+
+<a href="{{ url_for('search_patient') }}" class="back">
+← Back
+</a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Report | MediSecure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #121212; color: #e5e7eb; min-height: 100vh; padding: 20px; }
+
+        header {
+            background: #1f1f1f; padding: 18px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-radius: 12px; margin-bottom: 25px; flex-wrap: wrap; gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.3);
+        }
+        header h2 { font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 10px; color: #fff; }
+        header h2 i { color: #10b981; }
+        header a {
+            color: white; text-decoration: none; font-size: 14px;
+            background: #3b82f6; padding: 10px 18px; border-radius: 8px;
+            transition: .3s; font-weight: 500;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        header a:hover { background: #2563eb; transform: translateY(-1px); }
+
+        .container { width: 95%; max-width: 700px; margin: 0 auto; }
+
+        .card {
+            background: #1f1f1f; border-radius: 12px; padding: 30px;
+            border: 1px solid #2d3748; box-shadow: 0 8px 25px rgba(0,0,0,.2);
+        }
+
+        .flash-message { padding: 12px 16px; border-radius: 10px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px; font-weight: 500; }
+        .flash-message.success { background: #065f46; color: #34d399; border-left: 4px solid #34d399; }
+        .flash-message.error { background: #7f1d1d; color: #fca5a5; border-left: 4px solid #fca5a5; }
+        .flash-message.warning { background: #78350f; color: #fbbf24; border-left: 4px solid #fbbf24; }
+
+        .info-box {
+            background: #111827; padding: 18px; border-radius: 10px;
+            margin-bottom: 25px; border-left: 4px solid #3b82f6;
+        }
+        .info-box p { margin: 6px 0; color: #cbd5e1; font-size: 14px; }
+        .info-box strong { color: #fff; }
+
+        label { display: block; color: #fff; margin-bottom: 10px; font-weight: 500; font-size: 15px; }
+        label i { color: #10b981; margin-right: 6px; }
+
+        select {
+            width: 100%; padding: 14px; border-radius: 10px;
+            border: 1px solid #374151; background: #111827; color: #e5e7eb;
+            font-size: 14px; margin-bottom: 25px; outline: none; transition: .3s;
+            cursor: pointer;
+        }
+        select:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
+        select option { background: #1f1f1f; color: #e5e7eb; }
+
+        .btn-row { display: flex; gap: 12px; }
+
+        .send-submit {
+            flex: 1; background: #10b981; color: white; padding: 14px;
+            border-radius: 10px; border: none; font-weight: 600;
+            font-size: 14px; cursor: pointer; transition: .3s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .send-submit:hover { background: #059669; transform: translateY(-1px); }
+
+        .cancel-btn {
+            flex: 1; background: #374151; color: white; padding: 14px;
+            border-radius: 10px; text-decoration: none; text-align: center;
+            font-weight: 600; font-size: 14px; transition: .3s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .cancel-btn:hover { background: #4b5563; transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2><i class="fa-solid fa-paper-plane"></i> Send Report</h2>
+    <a href="{{ url_for('view_my_reports', doctor_id=doctor_id) }}">
+        <i class="fa-solid fa-arrow-left"></i> Back to My Reports
+    </a>
+</header>
+
+<div class="container">
+    <div class="card">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-xmark{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="info-box">
+            <p><strong>Patient:</strong> {{ report['patient_name'] or 'N/A' }}</p>
+            <p><strong>Patient ID:</strong> {{ report['patient_number'] or 'N/A' }}</p>
+            <p><strong>Diagnosis:</strong> {{ report['diagnosis'] or 'N/A' }}</p>
+        </div>
+
+        <form method="POST">
+            <label for="receiver_id">
+                <i class="fa-solid fa-user-doctor"></i> Select Recipient Doctor:
+            </label>
+            <select name="receiver_id" id="receiver_id" required>
+                <option value="">-- Choose a Doctor --</option>
+                {% for doctor in doctors %}
+                    <option value="{{ doctor['doctor_id'] }}">
+                        Dr. {{ doctor['doctor_name'] }}
+                        {% if doctor['specialization'] %} ({{ doctor['specialization'] }}){% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <div class="btn-row">
+                <a href="{{ url_for('view_my_reports', doctor_id=doctor_id) }}" class="cancel-btn">
+                    <i class="fa-solid fa-times"></i> Cancel
+                </a>
+                <button type="submit" class="send-submit">
+                    <i class="fa-solid fa-paper-plane"></i> Send Report
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

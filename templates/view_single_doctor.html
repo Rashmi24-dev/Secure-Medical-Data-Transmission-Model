@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Details | MediSecure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #0a0a0a; min-height: 100vh; padding: 25px; display: flex; align-items: flex-start; justify-content: center; }
+
+        .container { max-width: 900px; width: 100%; }
+
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; background: #1a1a1a; padding: 20px 30px; border-radius: 16px; border: 1px solid #2a2a2a; }
+        .header-left h1 { color: #e0e0e0; font-size: 24px; display: flex; align-items: center; gap: 10px; }
+        .header-left h1 i { color: #4a7ab5; }
+        .header-left p { color: #888888; font-size: 13px; margin-top: 4px; }
+
+        .btn { padding: 10px 20px; border-radius: 10px; text-decoration: none; border: none; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Poppins', sans-serif; font-size: 13px; transition: all 0.3s ease; }
+        .btn-outline { border: 2px solid #2a2a2a; background: #1a1a1a; color: #b0b0b0; }
+        .btn-outline:hover { border-color: #4a7ab5; color: #e0e0e0; background: #1e1e1e; }
+        .btn-approve { background: #27ae60; color: white; border: none; }
+        .btn-approve:hover { background: #1e8449; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); }
+        .btn-force { background: #3a2a10; color: #f0b060; border: 1px solid #f0b060; }
+        .btn-force:hover { background: #f0b060; color: #111; transform: translateY(-2px); }
+        .btn-view-doc { background: #3b1a5f; color: #c084fc; border: 1px solid #8b5cf6; }
+        .btn-view-doc:hover { background: #8b5cf6; color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+
+        .profile-card { background: #1a1a1a; border-radius: 16px; padding: 35px; border: 1px solid #2a2a2a; margin-bottom: 25px; }
+
+        .profile-header { display: flex; align-items: center; gap: 25px; border-bottom: 1px solid #2a2a2a; padding-bottom: 25px; margin-bottom: 25px; flex-wrap: wrap; }
+        .profile-avatar { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; color: white; flex-shrink: 0; }
+        .profile-info h2 { color: #e0e0e0; font-size: 26px; }
+        .profile-info .specialization { color: #60a5fa; font-weight: 500; font-size: 16px; margin-top: 4px; }
+        .profile-info .hospital { color: #888888; font-size: 14px; margin-top: 6px; }
+
+        .detail-section { margin-bottom: 25px; }
+        .detail-section h3 { color: #e0e0e0; font-size: 16px; font-weight: 600; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #2a2a2a; }
+        .detail-section h3 i { color: #4a7ab5; margin-right: 8px; }
+
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .detail-item { background: #111111; padding: 12px 16px; border-radius: 10px; border: 1px solid #2a2a2a; }
+        .detail-item .label { font-size: 11px; color: #888888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .detail-item .value { font-size: 15px; color: #e0e0e0; font-weight: 500; margin-top: 3px; }
+
+        .detail-item.full-width { grid-column: 1 / -1; }
+
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .status-badge.Active { background: #1a3a2a; color: #6ee7a0; }
+        .status-badge.Pending { background: #3a2a10; color: #f0b060; }
+        .status-badge.Inactive { background: #3a1a1a; color: #ff8080; }
+
+        .action-buttons { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        .action-buttons .btn, .action-buttons form { flex: 1; min-width: 200px; }
+        .action-buttons form { display: flex; margin: 0; }
+        .action-buttons form .btn { flex: 1; padding: 14px; font-size: 14px; border-radius: 12px; width: 100%; }
+        .action-buttons > .btn { padding: 14px; font-size: 14px; border-radius: 12px; }
+
+        .flash-messages { margin-bottom: 20px; }
+        .flash-message { padding: 14px 20px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
+        .flash-message.success { background: #1a3a2a; color: #6ee7a0; border-left: 4px solid #6ee7a0; }
+        .flash-message.error { background: #3a1a1a; color: #ff8080; border-left: 4px solid #ff8080; }
+        .flash-message.info { background: #1a2a3a; color: #60a5fa; border-left: 4px solid #60a5fa; }
+        .flash-message.warning { background: #3a2a10; color: #f0b060; border-left: 4px solid #f0b060; }
+
+        @media (max-width: 768px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .profile-header { flex-direction: column; text-align: center; }
+            .action-buttons { flex-direction: column; align-items: stretch; }
+            .action-buttons .btn, .action-buttons form { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="page-header">
+            <div class="header-left">
+                <h1><i class="fa-solid fa-user-doctor"></i> Doctor Details</h1>
+                <p>View and verify doctor information</p>
+            </div>
+            <a href="{{ url_for('view_doctors') }}" class="btn btn-outline">
+                <i class="fa-solid fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fa-solid fa-{% if category == 'success' %}circle-check{% elif category == 'info' %}circle-info{% elif category == 'warning' %}triangle-exclamation{% else %}circle-xmark{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="profile-card">
+            <div class="profile-header">
+                {% set colors = ['#0B3D91', '#27ae60', '#f39c12', '#8e44ad', '#e74c3c', '#1abc9c'] %}
+                {% set color_index = doctor.doctor_id % 6 %}
+                <div class="profile-avatar" style="background:{{ colors[color_index] }}">
+                    {{ doctor.doctor_name.split()[0][0] if doctor.doctor_name.split() else doctor.doctor_name[0] }}{{ doctor.doctor_name.split()[1][0] if doctor.doctor_name.split()|length > 1 else '' }}
+                </div>
+                <div class="profile-info">
+                    <h2>Dr. {{ doctor.doctor_name }}</h2>
+                    <div class="specialization">{{ doctor.specialization }}</div>
+                    <div class="hospital"><i class="fa-solid fa-hospital"></i> {{ doctor.hospital_name or 'N/A' }}</div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3><i class="fa-solid fa-briefcase"></i> Professional Information</h3>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="label">Doctor ID</div>
+                        <div class="value">#{{ "%04d"|format(doctor.doctor_id) }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Account Status</div>
+                        <div class="value">
+                            <span class="status-badge {{ doctor.status }}">{{ doctor.status or 'Active' }}</span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">License Number</div>
+                        <div class="value">{{ doctor.license_number or 'N/A' }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Experience</div>
+                        <div class="value">{{ doctor.experience or 0 }} Years</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3><i class="fa-solid fa-address-card"></i> Contact Information</h3>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="label">Email</div>
+                        <div class="value">{{ doctor.email }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Phone Number</div>
+                        <div class="value">{{ doctor.phone or 'N/A' }}</div>
+                    </div>
+                    <div class="detail-item full-width">
+                        <div class="label">Address</div>
+                        <div class="value">{{ doctor.address or 'N/A' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            {% if doctor.license_document %}
+                <a href="{{ url_for('static', filename='uploads/' + doctor.license_document) }}" target="_blank" class="btn btn-view-doc">
+                    <i class="fa-solid fa-file-pdf"></i> Open License Document
+                </a>
+            {% endif %}
+
+            {% if doctor.status == 'Pending' %}
+                <!-- APPROVE (POST, sends email) -->
+                <form method="POST"
+                      action="{{ url_for('approve_doctor', doctor_id=doctor.doctor_id) }}"
+                      onsubmit="return confirm('Approve Dr. {{ doctor.doctor_name|e }} and send approval email to {{ doctor.email|e }}?');">
+                    <button type="submit" class="btn btn-approve">
+                        <i class="fa-solid fa-check-circle"></i> Approve &amp; Send Email
+                    </button>
+                </form>
+
+                <!-- FORCE APPROVE (POST, no email) -->
+                <form method="POST"
+                      action="{{ url_for('force_approve_doctor', doctor_id=doctor.doctor_id) }}"
+                      onsubmit="return confirm('Force-approve Dr. {{ doctor.doctor_name|e }} WITHOUT sending any email?\\n\\nThe doctor will be active but will NOT receive a notification.');">
+                    <button type="submit" class="btn btn-force">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Force Approve (no email)
+                    </button>
+                </form>
+            {% endif %}
+
+            <a href="{{ url_for('view_doctors') }}" class="btn btn-outline">
+                <i class="fa-solid fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

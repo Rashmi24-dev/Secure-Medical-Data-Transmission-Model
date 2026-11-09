@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Medical Report | Secure Medical Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body { background: #121212; color: #e5e7eb; font-family: 'Inter', sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: #1f1f1f; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .top-bar h2 { color: #fff; margin: 0; }
+
+        .back-btn {
+            color: white;
+            background: #3b82f6;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        .back-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .card { background: #1f1f1f; border-radius: 15px; padding: 30px; margin-bottom: 20px; }
+        .card h3 { color: #fff; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .info-item { background: #2d3748; padding: 12px; border-radius: 8px; }
+        .info-item label { color: #94a3b8; font-size: 12px; display: block; margin-bottom: 5px; }
+        .info-item p { color: #fff; font-size: 14px; font-weight: 600; margin: 0; }
+        .file-links { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .file-link { background: #3b82f6; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: none; }
+        .file-link:hover { background: #2563eb; }
+        .file-link.stego { background: #f59e0b; }
+        .file-link.stego:hover { background: #d97706; }
+        .file-link.active { background: #dc2626; }
+        .file-link.active:hover { background: #b91c1c; }
+
+        .preview-container {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            background: #0d0d0d;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #333;
+        }
+        .preview-container.active { display: block; }
+        .preview-container img { max-width: 100%; border-radius: 10px; border: 1px solid #333; }
+
+        .pdf-viewer { width: 100%; height: 600px; border: 1px solid #333; border-radius: 10px; background: #0d0d0d; }
+        .pdf-viewer iframe { width: 100%; height: 100%; border: none; border-radius: 10px; }
+
+        .close-preview {
+            background: #dc2626; color: white; border: none; padding: 8px 16px;
+            border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 15px;
+        }
+        .close-preview:hover { background: #b91c1c; }
+
+        @media (max-width: 768px) {
+            .info-grid { grid-template-columns: 1fr; }
+            .pdf-viewer { height: 400px; }
+            .top-bar { flex-direction: column; gap: 10px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top-bar">
+        <h2><i class="fa-solid fa-file-medical"></i> View Medical Report</h2>
+
+        {% if admin_view %}
+            <a href="{{ url_for('reports') }}" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to Reports
+            </a>
+        {% elif request.referrer and 'sent_reports' in request.referrer %}
+            <a href="{{ url_for('sent_reports', doctor_id=doctor_id) }}" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to Sent Reports
+            </a>
+        {% else %}
+            <a href="{{ url_for('view_my_reports', doctor_id=doctor_id) }}" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to My Reports
+            </a>
+        {% endif %}
+
+    </div>
+
+    <div class="card">
+        <h3>Patient Information</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <label>Patient Name</label>
+                <p>{{ report['patient_name'] or 'N/A' }}</p>
+            </div>
+            <div class="info-item">
+                <label>Patient ID</label>
+                <p>{{ report['patient_number'] or 'N/A' }}</p>
+            </div>
+            <div class="info-item">
+                <label>Age</label>
+                <p>{{ report['age'] or 'N/A' }}</p>
+            </div>
+            <div class="info-item">
+                <label>Gender</label>
+                <p>{{ report['gender'] or 'N/A' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Medical Details</h3>
+        <div class="info-grid">
+            <div class="info-item" style="grid-column: 1 / -1;">
+                <label>Diagnosis</label>
+                <p>{{ report['diagnosis'] or 'N/A' }}</p>
+            </div>
+            <div class="info-item" style="grid-column: 1 / -1;">
+                <label>Prescription</label>
+                <p>{{ report['prescription'] or 'N/A' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Report Files</h3>
+
+        <div class="file-links">
+            {% if report['report_file'] %}
+                <button onclick="togglePDF()" class="file-link" id="pdfToggleBtn">
+                    <i class="fa-solid fa-file-pdf"></i> View PDF
+                </button>
+            {% endif %}
+
+            {% if report['xray_image'] %}
+                <button onclick="toggleXRay()" class="file-link" id="xrayToggleBtn">
+                    <i class="fa-solid fa-image"></i> View X-Ray
+                </button>
+            {% endif %}
+
+            {% if report['stego_image'] %}
+                <a href="{{ url_for('static', filename='uploads/' + report['stego_image']) }}" download="stego_image.png" class="file-link stego">
+                    <i class="fa-solid fa-download"></i> Download Stego Image
+                </a>
+            {% endif %}
+        </div>
+
+        {% if report['report_file'] %}
+        <div class="preview-container" id="pdfPreview">
+            <div class="pdf-viewer">
+                <iframe src="{{ url_for('static', filename='uploads/' + report['report_file']) }}#toolbar=0"></iframe>
+            </div>
+            <button onclick="togglePDF()" class="close-preview">
+                <i class="fa-solid fa-times"></i> Close PDF
+            </button>
+        </div>
+        {% endif %}
+
+        {% if report['xray_image'] %}
+        <div class="preview-container" id="xrayPreview">
+            <img src="{{ url_for('static', filename='uploads/' + report['xray_image']) }}" alt="X-Ray Image">
+            <button onclick="toggleXRay()" class="close-preview">
+                <i class="fa-solid fa-times"></i> Close X-Ray
+            </button>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h3>Transmission Details</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <label>Status</label>
+                <p>{{ report['status'] or 'N/A' }}</p>
+            </div>
+            <div class="info-item">
+                <label>Upload Date</label>
+                <p>{{ report['upload_date'] or 'N/A' }}</p>
+            </div>
+            <div class="info-item">
+                <label>Sent Date</label>
+                <p>{{ report['sent_date'] or 'N/A' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePDF() {
+        const preview = document.getElementById('pdfPreview');
+        const toggleBtn = document.getElementById('pdfToggleBtn');
+
+        if (preview.classList.contains('active')) {
+            preview.classList.remove('active');
+            toggleBtn.classList.remove('active');
+            toggleBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> View PDF';
+        } else {
+            const xrayPreview = document.getElementById('xrayPreview');
+            const xrayBtn = document.getElementById('xrayToggleBtn');
+            if (xrayPreview && xrayPreview.classList.contains('active')) {
+                xrayPreview.classList.remove('active');
+                xrayBtn.classList.remove('active');
+                xrayBtn.innerHTML = '<i class="fa-solid fa-image"></i> View X-Ray';
+            }
+
+            preview.classList.add('active');
+            toggleBtn.classList.add('active');
+            toggleBtn.innerHTML = '<i class="fa-solid fa-times"></i> Hide PDF';
+        }
+    }
+
+    function toggleXRay() {
+        const preview = document.getElementById('xrayPreview');
+        const toggleBtn = document.getElementById('xrayToggleBtn');
+
+        if (preview.classList.contains('active')) {
+            preview.classList.remove('active');
+            toggleBtn.classList.remove('active');
+            toggleBtn.innerHTML = '<i class="fa-solid fa-image"></i> View X-Ray';
+        } else {
+            const pdfPreview = document.getElementById('pdfPreview');
+            const pdfBtn = document.getElementById('pdfToggleBtn');
+            if (pdfPreview && pdfPreview.classList.contains('active')) {
+                pdfPreview.classList.remove('active');
+                pdfBtn.classList.remove('active');
+                pdfBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> View PDF';
+            }
+
+            preview.classList.add('active');
+            toggleBtn.classList.add('active');
+            toggleBtn.innerHTML = '<i class="fa-solid fa-times"></i> Hide X-Ray';
+        }
+    }
+</script>
+
+</body>
+</html>

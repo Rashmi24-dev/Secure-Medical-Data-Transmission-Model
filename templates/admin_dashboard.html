@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | MediSecure</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --bg: #0f172a;
+            --sidebar: #1e293b;
+            --panel: #1e293b;
+            --panel-hover: #334155;
+            --border: #334155;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            
+            --blue: #3b82f6;
+            --green: #10b981;
+            --red: #ef4444;
+            --orange: #f59e0b;
+            --purple: #8b5cf6;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* Highlight style for search matches */
+        mark.search-highlight {
+            background-color: var(--orange);
+            color: #111;
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transition: transform .3s ease;
+        }
+
+        .sidebar-profile {
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+        }
+
+        .avatar {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            display: grid; place-items: center;
+            font-size: 32px; font-weight: 700; color: white;
+            margin-bottom: 15px;
+            border: 3px solid var(--border);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .sidebar-profile h2 { font-size: 16px; font-weight: 600; text-align: center; }
+        .sidebar-profile p { font-size: 12px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px;}
+
+        .sidebar-nav { padding: 20px 14px; flex: 1; overflow-y: auto; }
+        
+        .nav-label {
+            padding: 15px 12px 8px;
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            transition: .2s;
+            margin-bottom: 4px;
+        }
+
+        .nav-item i { width: 20px; text-align: center; font-size: 16px; }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--panel-hover);
+            color: var(--text);
+        }
+
+        .nav-item.active { background: var(--blue); color: white; }
+        .nav-item.danger { color: var(--red); }
+        .nav-item.danger:hover { background: rgba(239, 68, 68, 0.1); }
+
+        .nav-count {
+            margin-left: auto;
+            background: #a83245;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        .nav-count.green { background: #155b49; color: #a7f3d0; }
+
+        /* ================= MAIN CONTENT ================= */
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 80px;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar h2 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .topbar h2 span { color: var(--muted); font-weight: 400; margin-left: 10px; text-transform: none; letter-spacing: normal; }
+
+        .search-box {
+            width: 350px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--sidebar);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .search-box i { color: var(--muted); }
+        .search-box input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .dashboard-body {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* ================= GRID LAYOUT ================= */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1.5fr 1fr; 
+            gap: 24px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .panel-header {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .panel-header i { color: var(--blue); margin-right: 8px; }
+
+        /* ================= CSS BAR CHART ================= */
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 180px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+            width: 100%;
+            max-width: 40px;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 100%;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease;
+        }
+        
+        .bar.blue { background: var(--blue); box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        .bar.green { background: var(--green); box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+        .bar.orange { background: var(--orange); box-shadow: 0 0 10px rgba(245, 158, 11, 0.3); }
+        .bar.purple { background: var(--purple); box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+
+        .bar-label {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .legend-color {
+            width: 10px; height: 10px;
+            border-radius: 2px;
+        }
+
+        /* ================= MIDDLE TABLE ================= */
+        .table-wrap { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th {
+            text-align: left; padding: 12px 10px;
+            color: var(--muted); font-size: 11px; text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+        td { padding: 14px 10px; border-bottom: 1px solid var(--border); }
+        tbody tr:hover { background: var(--panel-hover); }
+        tbody tr:last-child td { border-bottom: none; }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 10px; border-radius: 20px;
+            background: #25354d; color: #93c5fd;
+            font-size: 11px; font-weight: 600;
+        }
+        .status-badge.sent, .status-badge.completed { background: #174438; color: #6ee7b7; }
+        .status-badge.pending { background: #49391e; color: #fcd34d; }
+
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+        .empty-state i { font-size: 30px; margin-bottom: 10px; opacity: 0.5; }
+
+        /* ================= RIGHT ALERTS ================= */
+        .alert-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .alert-box i { font-size: 32px; color: var(--orange); margin-bottom: 12px; }
+        .alert-box h3 { font-size: 16px; margin-bottom: 8px; }
+        .alert-box p { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+        
+        .btn-primary {
+            background: var(--orange); color: #111;
+            padding: 10px 16px; border-radius: 6px;
+            font-size: 13px; font-weight: 700;
+            display: inline-block; transition: 0.2s;
+        }
+        .btn-primary:hover { background: #fcd34d; }
+
+        .mini-stat-row {
+            display: flex; justify-content: space-between;
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+        }
+        .mini-stat-row:last-child { border-bottom: none; }
+        .mini-stat-label { font-size: 13px; color: var(--muted); }
+        .mini-stat-value { font-size: 14px; font-weight: 700; }
+
+        /* ================= BOTTOM STATS ================= */
+        .bottom-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-3px); border-color: #4b648b; }
+
+        .stat-icon {
+            width: 50px; height: 50px; border-radius: 12px;
+            display: grid; place-items: center; font-size: 20px;
+        }
+        .stat-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+        .stat-icon.red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+        .stat-icon.purple { background: rgba(139, 92, 246, 0.15); color: var(--purple); }
+
+        .stat-info h3 { font-size: 24px; font-weight: 700; line-height: 1.2; }
+        .stat-info p { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+        /* Utility class for JS filtering */
+        .hidden-by-search { display: none !important; }
+
+        /* ================= RESPONSIVE ================= */
+        .menu-toggle { display: none; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+        .sidebar-overlay { display: none; }
+
+        @media (max-width: 1200px) {
+            .main-grid { grid-template-columns: 1fr 1fr; }
+            .right-col { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+            .bottom-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 950px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; }
+            .menu-toggle { display: block; }
+            .sidebar-overlay.active {
+                display: block; position: fixed; inset: 0;
+                background: rgba(0,0,0,0.5); z-index: 999;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .right-col { grid-column: span 1; grid-template-columns: 1fr; }
+            .search-box { display: none; }
+        }
+
+        @media (max-width: 500px) {
+            .bottom-stats { grid-template-columns: 1fr; }
+            .dashboard-body { padding: 15px; }
+            .topbar { padding: 0 15px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-profile">
+            <div class="avatar">A</div>
+            <h2>Admin User</h2>
+            <p>System Admin</p>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-label">Main Menu</div>
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-item active">
+                <i class="fa-solid fa-house"></i> Dashboard
+            </a>
+
+            <div class="nav-label">Hospital Mgmt</div>
+            <a href="{{ url_for('add_hospital') }}" class="nav-item">
+                <i class="fa-solid fa-circle-plus"></i> Add Hospital
+            </a>
+            <a href="{{ url_for('view_hospital') }}" class="nav-item">
+                <i class="fa-solid fa-hospital"></i> View Hospitals
+                <span class="nav-count green">{{ total_hospitals }}</span>
+            </a>
+
+            <div class="nav-label">Doctor Mgmt</div>
+            <a href="{{ url_for('view_doctors') }}" class="nav-item">
+                <i class="fa-solid fa-user-doctor"></i> View Doctors
+                {% if pending_doctors > 0 %}
+                    <span class="nav-count">{{ pending_doctors }}</span>
+                {% else %}
+                    <span class="nav-count green">{{ total_doctors }}</span>
+                {% endif %}
+            </a>
+
+            <div class="nav-label">Analytics</div>
+            <a href="{{ url_for('reports') }}" class="nav-item">
+                <i class="fa-solid fa-file-medical"></i> Reports
+                <span class="nav-count green">{{ total_reports }}</span>
+            </a>
+
+            <div class="nav-label" style="margin-top: 20px;">System</div>
+            <a href="{{ url_for('home') }}" class="nav-item danger">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main">
+        
+        <header class="topbar">
+            <div style="display:flex; align-items:center; gap:15px;">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <h2>Dashboard <span>Healthcare overview</span></h2>
+            </div>
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="globalSearch" placeholder="Search anything (hospitals, doctors, reports)..." oninput="universalSearch(this.value)">
+            </div>
+        </header>
+
+        <div class="dashboard-body" id="searchableArea">
+            
+            <!-- ================= TOP MAIN GRID ================= -->
+            <div class="main-grid">
+                
+                <!-- Left Col: CSS Bar Chart -->
+                <div class="panel searchable-panel">
+                    <div class="panel-header">
+                        <span><i class="fa-solid fa-chart-bar"></i> System Overview</span>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-bars">
+                            <div class="bar-wrapper searchable-text">
+                                <div class="bar blue" style="height: 70%;"></div>
+                                <div class="bar-label">Hospitals</div>
+                            </div>
+                            <div class="bar-wrapper searchable-text">
+                                <div class="bar green" style="height: 90%;"></div>
+                                <div class="bar-label">Doctors</div>
+                            </div>
+                            <div class="bar-wrapper searchable-text">
+                                <div class="bar orange" style="height: 50%;"></div>
+                                <div class="bar-label">Reports</div>
+                            </div>
+                            <div class="bar-wrapper searchable-text">
+                                <div class="bar purple" style="height: 80%;"></div>
+                                <div class="bar-label">Active</div>
+                            </div>
+                        </div>
+
+                        <div class="chart-legend searchable-text">
+                            <div class="legend-item"><div class="legend-color" style="background:var(--blue)"></div> Hospitals</div>
+                            <div class="legend-item"><div class="legend-color" style="background:var(--green)"></div> Doctors</div>
+                            <div class="legend-item"><div class="legend-color" style="background:var(--orange)"></div> Reports</div>
+                            <div class="legend-item"><div class="legend-color" style="background:var(--purple)"></div> Active</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Middle Col: Recent Transmissions Table -->
+                <div class="panel searchable-panel">
+                    <div class="panel-header">
+                        <span><i class="fa-solid fa-clock-rotate-left"></i> Recent Transmissions</span>
+                        <a href="{{ url_for('reports') }}" style="font-size:12px; color:var(--blue); font-weight:600;">View All</a>
+                    </div>
+                    
+                    <div class="table-wrap">
+                        <table id="transmissionTable">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>From</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recent_transmissions %}
+                                    {% for transmission in recent_transmissions %}
+                                    <tr class="transmission-row searchable-text">
+                                        <td style="font-weight:600;">{{ transmission.patient_name or 'N/A' }}</td>
+                                        <td>{{ transmission.from_hospital or 'N/A' }}</td>
+                                        <td>
+                                            {% set status = transmission.status or 'Pending' %}
+                                            <span class="status-badge {{ status|lower }}">
+                                                {{ status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="empty-state">
+                                                <i class="fa-solid fa-inbox"></i>
+                                                <p>No recent transmissions</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                        <div class="no-results" id="noResults" style="display:none; text-align:center; padding:20px; color:var(--muted); font-size:13px;">
+                            No matching transmissions found in this table.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Col: Doctor Management Alerts -->
+                <div class="panel right-col searchable-panel">
+                    <div>
+                        <div class="panel-header">
+                            <span><i class="fa-solid fa-user-doctor"></i> Doctor Mgmt</span>
+                        </div>
+                        
+                        {% if pending_doctors > 0 %}
+                        <div class="alert-box searchable-text">
+                            <i class="fa-solid fa-user-clock"></i>
+                            <h3>Action Required</h3>
+                            <p><strong>{{ pending_doctors }} doctor registration(s)</strong> are waiting for your approval.</p>
+                            <a href="{{ url_for('view_doctors', status='Pending') }}" class="btn-primary">Review Now</a>
+                        </div>
+                        {% else %}
+                        <div class="alert-box searchable-text" style="background:rgba(16, 185, 129, 0.1); border-color:rgba(16, 185, 129, 0.3);">
+                            <i class="fa-solid fa-check-circle" style="color:var(--green);"></i>
+                            <h3>All Clear</h3>
+                            <p>No pending doctor registrations at this time.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="searchable-text">
+                        <div class="mini-stat-row">
+                            <span class="mini-stat-label">Total Doctors</span>
+                            <span class="mini-stat-value">{{ total_doctors }}</span>
+                        </div>
+                        <div class="mini-stat-row">
+                            <span class="mini-stat-label">Active Doctors</span>
+                            <span class="mini-stat-value" style="color:var(--green);">{{ active_doctors }}</span>
+                        </div>
+                        <div class="mini-stat-row">
+                            <span class="mini-stat-label">Pending Approval</span>
+                            <span class="mini-stat-value" style="color:var(--orange);">{{ pending_doctors }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= BOTTOM STATS ROW ================= -->
+            <div class="bottom-stats">
+                
+                <div class="stat-card searchable-panel searchable-text">
+                    <div class="stat-icon blue"><i class="fa-solid fa-hospital"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ total_hospitals }}</h3>
+                        <p>Total Hospitals</p>
+                    </div>
+                </div>
+
+                <div class="stat-card searchable-panel searchable-text">
+                    <div class="stat-icon green"><i class="fa-solid fa-user-doctor"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ total_doctors }}</h3>
+                        <p>Total Doctors</p>
+                    </div>
+                </div>
+
+                <div class="stat-card searchable-panel searchable-text">
+                    <div class="stat-icon red"><i class="fa-solid fa-file-medical"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ total_reports }}</h3>
+                        <p>Reports Transmitted</p>
+                    </div>
+                </div>
+
+                <div class="stat-card searchable-panel searchable-text">
+                    <div class="stat-icon purple"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ active_doctors }}</h3>
+                        <p>Active Doctors</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        // Universal Search Function
+        function universalSearch(query) {
+            query = query.toLowerCase().trim();
+            const searchableArea = document.getElementById('searchableArea');
+            
+            // 1. Reset everything first
+            document.querySelectorAll('.hidden-by-search').forEach(el => el.classList.remove('hidden-by-search'));
+            document.querySelectorAll('.search-highlight').forEach(el => {
+                const parent = el.parentNode;
+                parent.replaceChild(document.createTextNode(el.textContent), el);
+                parent.normalize(); // Merges adjacent text nodes
+            });
+
+            if (query === '') return; // Stop if search is empty
+
+            // 2. Filter the Table Rows specifically
+            let visibleTableRows = 0;
+            document.querySelectorAll('.transmission-row').forEach(row => {
+                const matches = row.textContent.toLowerCase().includes(query);
+                if (matches) visibleTableRows++;
+            });
+
+            // Show/Hide table "no results" message
+            const noResults = document.getElementById('noResults');
+            if (noResults) {
+                noResults.style.display = (visibleTableRows === 0 && document.querySelectorAll('.transmission-row').length > 0) ? 'block' : 'none';
+            }
+
+            // 3. Loop through all panels/cards to hide non-matching ones
+            document.querySelectorAll('.searchable-panel').forEach(panel => {
+                // If the panel text includes the query, keep it and highlight the text inside
+                if (panel.textContent.toLowerCase().includes(query)) {
+                    
+                    // Highlight the matched text (only in text nodes to avoid breaking HTML structure)
+                    const walker = document.createTreeWalker(panel, NodeFilter.SHOW_TEXT, null, false);
+                    let node;
+                    const nodesToReplace = [];
+                    
+                    while (node = walker.nextNode()) {
+                        if (node.nodeValue.toLowerCase().includes(query)) {
+                            nodesToReplace.push(node);
+                        }
+                    }
+
+                    nodesToReplace.forEach(textNode => {
+                        const regex = new RegExp(`(${query})`, 'gi');
+                        const parts = textNode.nodeValue.split(regex);
+                        const fragment = document.createDocumentFragment();
+                        
+                        parts.forEach(part => {
+                            if (part.toLowerCase() === query) {
+                                const mark = document.createElement('mark');
+                                mark.className = 'search-highlight';
+                                mark.textContent = part;
+                                fragment.appendChild(mark);
+                            } else {
+                                fragment.appendChild(document.createTextNode(part));
+                            }
+                        });
+                        textNode.parentNode.replaceChild(fragment, textNode);
+                    });
+
+                } else {
+                    // If no match, hide the panel
+                    panel.classList.add('hidden-by-search');
+                }
+            });
+        }
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 950) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt Report | MediSecure</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #121212;
+            color: #e5e7eb;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1f1f1f;
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid #2d3748;
+        }
+
+        .top-bar h2 {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-bar h2 i {
+            color: #3b82f6;
+        }
+
+        .back-btn {
+            color: white;
+            background: #3b82f6;
+            padding: 9px 17px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .back-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .card {
+            background: #1f1f1f;
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid #2d3748;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #60a5fa;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-title i {
+            color: #3b82f6;
+        }
+
+        .card-subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 13px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            animation: slideDown 0.4s ease;
+        }
+
+        .flash-message.success {
+            background: #065f46;
+            color: #34d399;
+            border-left: 4px solid #34d399;
+        }
+
+        .flash-message.error {
+            background: #7f1d1d;
+            color: #fca5a5;
+            border-left: 4px solid #fca5a5;
+        }
+
+        .flash-message.warning {
+            background: #78350f;
+            color: #fbbf24;
+            border-left: 4px solid #fbbf24;
+        }
+
+        .flash-message.info {
+            background: #1e3a5f;
+            color: #60a5fa;
+            border-left: 4px solid #60a5fa;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ================= REPORT INFO BOX ================= */
+        .report-info {
+            background: #111827;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .report-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #2d3748;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .report-info .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .report-info .info-label {
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .report-info .info-value {
+            color: #e5e7eb;
+            font-weight: 500;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        /* ================= STEGO IMAGE BOX ================= */
+        .stego-box {
+            background: #111827;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #3b82f6;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+        }
+
+        .stego-box img {
+            max-width: 100%;
+            max-height: 420px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            border: 1px solid #374151;
+        }
+
+        .stego-info {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: left;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .stego-info h4 {
+            color: #60a5fa;
+            font-size: 15px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stego-info p {
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* ================= FILE UPLOAD ================= */
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e5e7eb;
+        }
+
+        .form-group label i {
+            color: #3b82f6;
+            margin-right: 6px;
+        }
+
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+            background: #2d3748;
+            color: #e5e7eb;
+            cursor: pointer;
+        }
+
+        .form-group input[type="file"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .form-group input[type="file"]::file-selector-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .form-group input[type="file"]::file-selector-button:hover {
+            background: #2563eb;
+        }
+
+        .form-group .hint {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .form-group .hint i {
+            color: #3b82f6;
+            margin-right: 4px;
+        }
+
+        .security-box {
+            background: #2d3748;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .security-box h4 {
+            color: #60a5fa;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .security-box ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .security-box ul li {
+            color: #94a3b8;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .security-box ul li i {
+            color: #34d399;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn:disabled {
+            background: #374151;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ================= NEW CLEAN DATA BOX ================= */
+        .data-box {
+            background: #111827;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #2d3748;
+            border-top: 4px solid #34d399; /* Subtle success indicator */
+            animation: slideDown 0.5s ease;
+        }
+
+        .data-box .data-title {
+            color: #e5e7eb;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #2d3748;
+            padding-bottom: 10px;
+        }
+
+        .data-box .data-title i {
+            color: #34d399;
+        }
+
+        .data-box .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #1f2937;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .data-box .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-box .detail-label {
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .data-box .detail-value {
+            color: #e5e7eb;
+            font-weight: 500;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .hash-verified {
+            color: #34d399;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .file-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            background: #3b82f6;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-top: 10px;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .file-link:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .section-heading {
+            color: #94a3b8;
+            font-weight: 600;
+            margin: 20px 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-heading i {
+            color: #3b82f6;
+        }
+
+        .prescription-box {
+            background: #1f1f1f;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #2d3748;
+            white-space: pre-wrap;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 55px;
+            color: #374151;
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            color: #e5e7eb;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .empty-state p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .top-bar h2 {
+                justify-content: center;
+            }
+
+            .back-btn {
+                justify-content: center;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .security-box ul {
+                grid-template-columns: 1fr;
+            }
+
+            .data-box .detail-row {
+                flex-direction: column;
+                gap: 3px;
+            }
+
+            .data-box .detail-value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+        <h2>
+            <i class="fa-solid fa-lock-open"></i>
+            Decrypt Report
+        </h2>
+        <a href="{{ url_for('received_reports', doctor_id=doctor_id) }}" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back to Received Reports
+        </a>
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            <i class="fa-solid fa-shield-halved"></i>
+            Secure Decryption
+        </div>
+        <p class="card-subtitle">
+            {% if hash_verified %}
+                Viewing previously decrypted medical data.
+            {% else %}
+                Upload your private RSA key to decrypt the medical report.
+                The decrypted files will be available for download.
+            {% endif %}
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fa-solid
+                                {% if category == 'success' %}fa-circle-check
+                                {% elif category == 'warning' %}fa-triangle-exclamation
+                                {% elif category == 'info' %}fa-circle-info
+                                {% else %}fa-circle-xmark{% endif %}
+                            "></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- ================= CLEAN DATA BOX ================= -->
+        {% if decrypted_report_filename and hash_verified %}
+            <div class="data-box">
+                
+                <div class="data-title">
+                    <i class="fa-solid fa-file-shield"></i> Medical Record Data
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Integrity Check</span>
+                    <span class="detail-value">
+                        <span class="hash-verified">
+                            <i class="fa-solid fa-check-circle"></i> Verified (SHA-256)
+                        </span>
+                    </span>
+                </div>
+
+                {% if patient_info %}
+                    <div class="detail-row">
+                        <span class="detail-label">Patient Name</span>
+                        <span class="detail-value">{{ patient_info.get('patient_name') or '—' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Patient ID</span>
+                        <span class="detail-value">{{ patient_info.get('patient_id') or '—' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Age / Gender</span>
+                        <span class="detail-value">{{ patient_info.get('age') or '—' }} / {{ patient_info.get('gender') or '—' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Diagnosis</span>
+                        <span class="detail-value">{{ patient_info.get('diagnosis') or '—' }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="section-heading">
+                <i class="fa-solid fa-download"></i> Downloads
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                {% if decrypted_report_filename %}
+                    <a href="{{ url_for('static', filename='uploads/' + decrypted_report_filename) }}"
+                       target="_blank"
+                       class="file-link">
+                        <i class="fa-solid fa-file-medical"></i>
+                        View / Download Medical Report
+                    </a>
+                {% endif %}
+
+                {% if decrypted_xray_filename %}
+                    <a href="{{ url_for('static', filename='uploads/' + decrypted_xray_filename) }}"
+                       target="_blank"
+                       class="file-link"
+                       style="background: #8b5cf6;">
+                        <i class="fa-solid fa-x-ray"></i>
+                        View / Download X-ray / MRI / CT
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- ================= PRESCRIPTION ================= -->
+            {% if prescription %}
+                <div class="section-heading">
+                    <i class="fa-solid fa-prescription"></i> Prescription
+                </div>
+                <pre class="prescription-box">{{ prescription }}</pre>
+            {% endif %}
+
+            <!-- ================= AI SUMMARY ================= -->
+            {% if ai_summary %}
+                <div class="section-heading" style="margin-top: 25px; color: #a78bfa;">
+                    <i class="fa-solid fa-robot" style="color: #a78bfa;"></i> AI Medical Summary
+                </div>
+                <div class="prescription-box" style="border-left: 4px solid #8b5cf6; background: #1e293b;">
+                    {{ ai_summary }}
+                </div>
+            {% endif %}
+            
+            <div style="margin-top: 25px; text-align: center;">
+                <a href="{{ url_for('received_reports', doctor_id=doctor_id) }}" class="back-btn" style="background: #2d3748; color: #e5e7eb;">
+                    <i class="fa-solid fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        {% endif %}
+
+        <!-- ================= FORM (only if there's a report to decrypt AND it hasn't been decrypted yet) ================= -->
+        {% if report and not hash_verified %}
+            <form method="POST" enctype="multipart/form-data" id="decryptForm">
+
+                <!-- ================= REPORT INFO (NO DROPDOWN) ================= -->
+                <div class="report-info">
+                    <div class="info-row">
+                        <span class="info-label">Report ID</span>
+                        <span class="info-value">#{{ "%04d"|format(report['report_id']) }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Patient</span>
+                        <span class="info-value">{{ report['patient_name'] or 'N/A' }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Sender Doctor</span>
+                        <span class="info-value">{{ report['sender_name'] or 'N/A' }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Date Received</span>
+                        <span class="info-value">{{ report['sent_date'] or 'N/A' }}</span>
+                    </div>
+                </div>
+
+                <!-- ================= ENCRYPTED STEGO IMAGE ================= -->
+                {% if report['stego_image'] %}
+                    <div class="section-heading">
+                        <i class="fa-solid fa-image"></i> Encrypted Stego Image
+                    </div>
+                    <div class="stego-box">
+                        <img src="{{ url_for('static', filename='uploads/' + report['stego_image']) }}" alt="Encrypted Stego Image">
+                        
+                        <div class="stego-info">
+                            <h4><i class="fa-solid fa-lock"></i> Secure Payload Container</h4>
+                            <p>
+                                This is the encrypted image sent by the sender. The medical report, X-ray, and prescription have been compressed, encrypted with <strong>AES-256</strong>, and hidden inside the pixels of this image using <strong>DWT Steganography</strong>. 
+                            </p>
+                            <p style="margin-top: 8px; font-size: 11px; color: #64748b;">
+                                File: {{ report['stego_image'] }}
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Hidden field carries the report ID to POST -->
+                <input type="hidden" name="report_id" value="{{ report['report_id'] }}">
+
+                <div class="form-group">
+                    <label>
+                        <i class="fa-solid fa-key"></i>
+                        Private RSA Key
+                        <span style="color: #f87171;">*</span>
+                    </label>
+                    <input type="file" name="private_key_file" accept=".pem,.key,.txt" required>
+                    <span class="hint">
+                        <i class="fa-solid fa-info-circle"></i>
+                        Upload your private RSA key file (.pem)
+                    </span>
+                </div>
+
+                <div class="security-box">
+                    <h4>
+                        <i class="fa-solid fa-shield-halved"></i>
+                        Decryption Process
+                    </h4>
+                    <ul>
+                        <li><i class="fa-solid fa-check-circle"></i> RSA-2048 decrypts AES key</li>
+                        <li><i class="fa-solid fa-check-circle"></i> AES-256 decrypts payload</li>
+                        <li><i class="fa-solid fa-check-circle"></i> DWT extracts data from stego image</li>
+                        <li><i class="fa-solid fa-check-circle"></i> SHA-256 verifies integrity</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="btn" id="decryptBtn">
+                    <i class="fa-solid fa-lock-open"></i>
+                    Decrypt Report
+                </button>
+
+            </form>
+        {% elif not report %}
+            <div class="empty-state">
+                <i class="fa-solid fa-inbox"></i>
+                <h3>No Report Selected</h3>
+                <p>Please go back to Received Reports and choose a report to decrypt.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+    document.getElementById('decryptForm')?.addEventListener('submit', function() {
+        const btn = document.getElementById('decryptBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Decrypting...';
+        btn.style.background = '#374151';
+    });
+</script>
+
+</body>
+
+</html>

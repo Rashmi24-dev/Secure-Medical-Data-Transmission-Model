@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | MediSecure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background: #121212;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: #1f1f1f;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid #2d3748;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2d3748;
+        }
+
+        .logo { font-size: 24px; font-weight: 700; color: #60a5fa; }
+        .logo i { margin-right: 10px; color: #3b82f6; }
+        .back-btn { 
+            color: #94a3b8; 
+            text-decoration: none; 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            transition: 0.3s; 
+            font-weight: 500; 
+        }
+        .back-btn:hover { 
+            background: #2d3748; 
+            color: #60a5fa; 
+        }
+
+        h1 { color: #60a5fa; font-size: 24px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+        h1 i { color: #3b82f6; }
+        .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 25px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; color: #e5e7eb; margin-bottom: 6px; font-size: 14px; }
+        .form-group label .required { color: #f87171; margin-left: 2px; }
+        .form-group label i { color: #3b82f6; margin-right: 6px; }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px 16px; border: 2px solid #374151; border-radius: 10px;
+            font-size: 14px; font-family: 'Inter', sans-serif; background: #2d3748; transition: all 0.3s ease; color: #e5e7eb;
+        }
+
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: #3b82f6; background: #2d3748; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group select option {
+            background: #1f1f1f;
+            color: #e5e7eb;
+        }
+
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* ================= AVATAR UPLOAD & CROP ================= */
+        .avatar-upload-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #2d3748;
+            border-radius: 15px;
+            border: 2px dashed #374151;
+        }
+
+        .avatar-preview-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 4px solid #3b82f6;
+            overflow: hidden;
+            background: #2d3748;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-preview-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .initials-avatar {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 50px; font-weight: 700; color: white;
+        }
+
+        .file-input-wrapper { position: relative; margin-top: 10px; }
+        .file-input-wrapper input[type="file"] { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer; }
+        .upload-btn { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            padding: 10px 20px; 
+            background: #3b82f6; 
+            color: white; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            transition: 0.3s; 
+        }
+        .upload-btn:hover { background: #2563eb; transform: translateY(-1px); }
+
+        /* Modal for Cropping */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1f1f1f;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid #2d3748;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: #60a5fa;
+        }
+
+        #imageToCrop {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            max-height: 300px;
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .modal-btn-crop { background: #3b82f6; color: white; }
+        .modal-btn-crop:hover { background: #2563eb; }
+        .modal-btn-cancel { background: #374151; color: #e5e7eb; }
+        .modal-btn-cancel:hover { background: #4b5563; }
+
+        /* ================= HOSPITAL INFO ================= */
+        .hospital-info {
+            background: #2d3748;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #374151;
+        }
+
+        .hospital-info label {
+            margin-bottom: 0;
+        }
+
+        .hospital-info p {
+            color: #e5e7eb;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .hospital-info .note {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .hospital-info .note i {
+            color: #fbbf24;
+            margin-right: 4px;
+        }
+
+        /* ================= BUTTONS ================= */
+        .buttons { display: flex; gap: 15px; margin-top: 30px; }
+        .btn { 
+            flex: 1; 
+            padding: 14px; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            text-decoration: none; 
+            text-align: center; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            font-family: 'Inter', sans-serif; 
+        }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3); }
+        .btn-danger { background: #dc2626; color: white; }
+        .btn-danger:hover { background: #b91c1c; transform: translateY(-2px); }
+
+        /* ================= FLASH MESSAGES ================= */
+        .flash-messages { margin-bottom: 20px; }
+        .flash-message { 
+            padding: 14px 20px; 
+            border-radius: 12px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            font-weight: 500; 
+            animation: slideDown 0.4s ease; 
+        }
+        .flash-message.success { background: #065f46; color: #34d399; border-left: 4px solid #34d399; }
+        .flash-message.error { background: #7f1d1d; color: #fca5a5; border-left: 4px solid #fca5a5; }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .container { padding: 25px 20px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .buttons { flex-direction: column; }
+            .btn { flex: none; width: 100%; }
+            header { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo"><i class="fa-solid fa-heart-pulse"></i> MediSecure</div>
+            <a href="{{ url_for('doctor_profile', doctor_id=doctor.doctor_id) }}" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Profile</a>
+        </header>
+
+        <h1><i class="fa-solid fa-user-pen"></i> Edit Profile</h1>
+        <p class="subtitle">Update your professional information</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fa-solid {% if category == 'success' %}fa-circle-check{% else %}fa-circle-xmark{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('edit_doctor_profile', doctor_id=doctor.doctor_id) }}" enctype="multipart/form-data">
+            
+            <!-- ================= AVATAR UPLOAD & CROP ================= -->
+            <div class="avatar-upload-section">
+                <div class="avatar-preview-circle" id="avatarPreview">
+                    {% if doctor.profile_pic %}
+                        <img src="{{ url_for('static', filename='uploads/' + doctor.profile_pic) }}" alt="Profile">
+                    {% else %}
+                        {% set colors = ['#0B3D91', '#27ae60', '#f39c12', '#8e44ad', '#e74c3c', '#1abc9c'] %}
+                        {% set color_index = doctor.doctor_id % 6 %}
+                        <div class="initials-avatar" style="background:{{ colors[color_index] }};">
+                            {{ doctor.doctor_name.split()[0][0] if doctor.doctor_name.split() else doctor.doctor_name[0] }}{{ doctor.doctor_name.split()[1][0] if doctor.doctor_name.split()|length > 1 else '' }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="file-input-wrapper">
+                    <input type="file" id="profile_pic" name="profile_pic" accept="image/*" onchange="openCropper(event)">
+                    <span class="upload-btn"><i class="fa-solid fa-camera"></i> Choose New Photo</span>
+                </div>
+            </div>
+            <!-- =================================================== -->
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-user"></i> Full Name <span class="required">*</span></label>
+                <input type="text" name="doctor_name" value="{{ doctor.doctor_name }}" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-envelope"></i> Email <span class="required">*</span></label>
+                    <input type="email" name="email" value="{{ doctor.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-phone"></i> Phone Number</label>
+                    <input type="text" name="phone" value="{{ doctor.phone or '' }}" placeholder="Enter phone number">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-stethoscope"></i> Specialization <span class="required">*</span></label>
+                    <select name="specialization" required>
+                        <option value="Cardiology" {% if doctor.specialization == 'Cardiology' %}selected{% endif %}>Cardiology</option>
+                        <option value="Neurology" {% if doctor.specialization == 'Neurology' %}selected{% endif %}>Neurology</option>
+                        <option value="Orthopedics" {% if doctor.specialization == 'Orthopedics' %}selected{% endif %}>Orthopedics</option>
+                        <option value="Pediatrics" {% if doctor.specialization == 'Pediatrics' %}selected{% endif %}>Pediatrics</option>
+                        <option value="Gynecology" {% if doctor.specialization == 'Gynecology' %}selected{% endif %}>Gynecology</option>
+                        <option value="Dermatology" {% if doctor.specialization == 'Dermatology' %}selected{% endif %}>Dermatology</option>
+                        <option value="Ophthalmology" {% if doctor.specialization == 'Ophthalmology' %}selected{% endif %}>Ophthalmology</option>
+                        <option value="ENT" {% if doctor.specialization == 'ENT' %}selected{% endif %}>ENT</option>
+                        <option value="General Medicine" {% if doctor.specialization == 'General Medicine' %}selected{% endif %}>General Medicine</option>
+                        <option value="Oncology" {% if doctor.specialization == 'Oncology' %}selected{% endif %}>Oncology</option>
+                        <option value="Psychiatry" {% if doctor.specialization == 'Psychiatry' %}selected{% endif %}>Psychiatry</option>
+                        <option value="Radiology" {% if doctor.specialization == 'Radiology' %}selected{% endif %}>Radiology</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-calendar"></i> Experience (Years)</label>
+                    <input type="number" name="experience" value="{{ doctor.experience or 0 }}" min="0" max="60" placeholder="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-id-card"></i> License Number</label>
+                <input type="text" name="license_number" value="{{ doctor.license_number or '' }}" placeholder="Enter license number">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-location-dot"></i> Address</label>
+                <textarea name="address" placeholder="Enter complete address">{{ doctor.address or '' }}</textarea>
+            </div>
+
+            <!-- Hospital Info (Read-only) -->
+            <div class="form-group">
+                <div class="hospital-info">
+                    <label><i class="fa-solid fa-hospital"></i> Hospital</label>
+                    <p>{{ doctor.hospital_name or 'N/A' }}</p>
+                    <div class="note"><i class="fa-solid fa-info-circle"></i> Hospital cannot be changed here. Contact admin for hospital transfer.</div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Update Profile</button>
+                <a href="{{ url_for('doctor_profile', doctor_id=doctor.doctor_id) }}" class="btn btn-danger"><i class="fa-solid fa-times"></i> Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- ================= CROPPER MODAL ================= -->
+    <div id="cropModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fa-solid fa-crop-simple"></i> Adjust Your Photo</h3>
+            <div style="max-height: 300px; overflow: hidden;">
+                <img id="imageToCrop" alt="Image to crop">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-crop" onclick="cropImage()"><i class="fa-solid fa-check"></i> Crop & Save</button>
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal()"><i class="fa-solid fa-times"></i> Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cropper.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+    <script>
+        let cropper;
+        let fileInput = document.getElementById('profile_pic');
+
+        function openCropper(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const image = document.getElementById('imageToCrop');
+                image.src = e.target.result;
+                
+                // Show modal
+                document.getElementById('cropModal').style.display = 'flex';
+
+                // Initialize Cropper
+                if (cropper) {
+                    cropper.destroy();
+                }
+                cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 1,
+                    background: false
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function cropImage() {
+            const canvas = cropper.getCroppedCanvas({
+                width: 300,
+                height: 300
+            });
+
+            canvas.toBlob((blob) => {
+                const file = new File([blob], "profile_photo.png", { type: "image/png" });
+                
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+                
+                const preview = document.getElementById('avatarPreview');
+                preview.innerHTML = `<img src="${URL.createObjectURL(blob)}" alt="Profile">`;
+
+                closeModal();
+            }, 'image/png');
+        }
+
+        function closeModal() {
+            document.getElementById('cropModal').style.display = 'none';
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+        }
+    </script>
+
+</body>
+</html>

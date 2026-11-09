@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration | MediSecure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            background-color: #0a0a0a; padding: 40px 20px;
+        }
+
+        .register-wrapper {
+            display: flex; width: 100%; max-width: 1100px; min-height: 700px;
+            background: #141414; border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 1px solid #262626;
+            overflow: hidden;
+        }
+
+        /* LEFT PANEL */
+        .left-panel {
+            width: 35%; background: #0f0f0f; padding: 50px 40px; color: #f5f5f5;
+            display: flex; flex-direction: column; position: relative;
+            border-right: 1px solid #262626;
+            background-image: radial-gradient(circle at top left, rgba(240, 78, 118, 0.05), transparent 60%);
+        }
+
+        .left-panel h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; color: #fafafa; }
+        .left-panel p.subtitle { font-size: 15px; color: #a3a3a3; margin-bottom: 30px; line-height: 1.6; }
+
+        /* MIDDLE IMAGE AREA */
+        .image-container {
+            width: 100%; height: 180px; border-radius: 16px; margin-bottom: 30px;
+            overflow: hidden; border: 1px solid rgba(240, 78, 118, 0.3);
+            background: linear-gradient(135deg, #2a0b14 0%, #4a0f22 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 10px 40px rgba(240, 78, 118, 0.15), inset 0 0 30px rgba(240, 78, 118, 0.1); 
+        }
+
+        .image-container i { font-size: 50px; margin-bottom: 12px; color: #f04e76; text-shadow: 0 0 25px rgba(240, 78, 118, 0.8); }
+        .image-container span { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #fda4af; }
+
+        /* TRUST FEATURES LIST */
+        .features-list { list-style: none; display: flex; flex-direction: column; gap: 18px; margin-top: 15px; padding: 0 10px; }
+        .features-list li { display: flex; align-items: center; gap: 14px; font-size: 14.5px; color: #cbd5e1; font-weight: 500; }
+        .features-list li i { color: #f04e76; background: rgba(240, 78, 118, 0.15); border: 1px solid rgba(240, 78, 118, 0.2); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+
+        .login-prompt { text-align: center; margin-top: auto; padding-top: 40px; }
+        .login-prompt h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #e5e5e5; }
+        .login-prompt p { font-size: 14px; color: #737373; }
+        .login-prompt a { color: #3b82f6; font-weight: 700; text-decoration: underline; transition: 0.2s; }
+        .login-prompt a:hover { color: #60a5fa; }
+
+        /* RIGHT PANEL */
+        .right-panel {
+            width: 65%; padding: 40px 50px 60px 50px; display: flex; flex-direction: column;
+            background: #0a0a0a; max-height: 90vh; overflow-y: auto;
+        }
+
+        .form-header { margin-bottom: 24px; }
+        .form-header h1 { font-size: 28px; color: #fafafa; font-weight: 700; margin-bottom: 6px; }
+        .form-header p { font-size: 14px; color: #737373; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group.full-width { grid-column: 1 / -1; }
+
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #d4d4d4; margin-bottom: 8px; }
+        
+        /* RED ASTERISK STYLE */
+        .req-star { color: #ef4444; margin-left: 4px; }
+
+        .input-wrapper { position: relative; display: flex; align-items: center; border: 1px solid #333333; border-radius: 8px; background: #171717; transition: 0.2s; }
+        .input-wrapper:focus-within { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); background: #1a1a1a; }
+        .input-wrapper i.left-icon { position: absolute; left: 14px; color: #737373; font-size: 16px; }
+
+        .input-wrapper input, .input-wrapper select {
+            width: 100%; padding: 14px 14px 14px 42px; border: none; background: transparent;
+            font-size: 14px; color: #fafafa; outline: none;
+        }
+
+        .input-wrapper select {
+            appearance: none; cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 14px center; background-size: 16px; padding-right: 40px;
+        }
+        
+        .input-wrapper select:invalid { color: #737373; }
+        .input-wrapper select option { color: #fafafa; background: #171717; padding: 10px; }
+
+        .input-wrapper input::placeholder { color: #525252; }
+
+        /* Prevent browser autofill styling */
+        .input-wrapper input:-webkit-autofill,
+        .input-wrapper input:-webkit-autofill:hover,
+        .input-wrapper input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #fafafa;
+            -webkit-box-shadow: 0 0 0px 1000px #171717 inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        
+        /* Fix for File Upload styling */
+        .input-wrapper input[type="file"] { color: #a3a3a3; padding-top: 12px; }
+        .input-wrapper input[type="file"]::file-selector-button {
+            background: #2563eb; color: white; border: none; padding: 8px 16px;
+            border-radius: 6px; cursor: pointer; font-weight: 600; margin-right: 10px;
+            transition: 0.2s;
+        }
+        .input-wrapper input[type="file"]::file-selector-button:hover { background: #1d4ed8; }
+
+        .password-toggle { position: absolute; right: 14px; background: none; border: none; color: #737373; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        .password-toggle:hover { color: #d4d4d4; }
+
+        .submit-btn {
+            width: 100%; background: #2563eb; color: #ffffff; border: none; border-radius: 8px;
+            padding: 16px; font-size: 16px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: all 0.2s ease; margin-top: 10px;
+        }
+        .submit-btn:hover { background: #1d4ed8; box-shadow: 0 0 25px rgba(37, 99, 235, 0.35); transform: translateY(-1px); }
+
+        .flash-message { padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+        .flash-error { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .flash-success { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        /* Smooth fade out animation */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+
+        .back-home-wrapper {
+            margin-top: 24px;
+            text-align: center;
+        }
+        .back-home-wrapper a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #a3a3a3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .back-home-wrapper a i {
+            font-size: 14px;
+        }
+        .back-home-wrapper a:hover {
+            color: #f04e76;
+        }
+
+        .right-panel::-webkit-scrollbar { width: 8px; }
+        .right-panel::-webkit-scrollbar-track { background: #0a0a0a; }
+        .right-panel::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+        .right-panel::-webkit-scrollbar-thumb:hover { background: #525252; }
+
+        @media (max-width: 900px) {
+            .register-wrapper { flex-direction: column; }
+            .left-panel, .right-panel { width: 100%; }
+            .left-panel { padding: 30px; border-right: none; border-bottom: 1px solid #262626; }
+            .login-prompt { margin-top: 40px; }
+            .right-panel { padding: 30px; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-wrapper">
+
+    <!-- LEFT DARK PANEL -->
+    <div class="left-panel">
+        
+        <h1>Join MediSecure</h1>
+        <p class="subtitle">Create your doctor account to access patient records and transmit data securely.</p>
+
+        <div class="image-container">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>MediSecure Network</span>
+        </div>
+
+        <ul class="features-list">
+            <li><i class="fa-solid fa-shield-halved"></i> AES-256 Payload Encryption</li>
+            <li><i class="fa-solid fa-key"></i> RSA-2048 Key Exchange</li>
+            <li><i class="fa-solid fa-image"></i> DWT Image Steganography</li>
+        </ul>
+
+        <div class="login-prompt">
+            <h3>Already registered?</h3>
+            <p>Log in <a href="{{ url_for('doctor_login') }}">here</a> to access your dashboard</p>
+        </div>
+    </div>
+
+    <!-- RIGHT FORM PANEL -->
+    <div class="right-panel">
+
+        <div class="form-header">
+            <h1>Doctor Registration</h1>
+            <p>Fill out your professional details to create an account.</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div id="flash-msg" class="flash-message flash-{{ 'error' if category == 'error' else 'success' }}">
+                        <i class="fa-solid fa-{{ 'circle-exclamation' if category == 'error' else 'circle-check' }}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('register') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+            <div class="form-grid">
+
+                <div class="form-group full-width">
+                    <label for="hospital_id">Hospital <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-hospital left-icon"></i>
+                        <select id="hospital_id" name="hospital_id" required autocomplete="off">
+                            <option value="" disabled selected>Select your hospital</option>
+                            {% for h in hospitals %}
+                                <option value="{{ h['hospital_id'] }}">{{ h['hospital_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="first_name">First Name <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user left-icon"></i>
+                        <input type="text" id="first_name" name="first_name" placeholder="John" required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">Last Name <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user left-icon"></i>
+                        <input type="text" id="last_name" name="last_name" placeholder="Doe" required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-envelope left-icon"></i>
+                        <input type="email" id="email" name="email" placeholder="doctor@stmarys.com" required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-phone left-icon"></i>
+                        <input type="text" id="phone" name="phone" placeholder="+91 90000 00000" required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="specialization">Specialization <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-stethoscope left-icon"></i>
+                        <select id="specialization" name="specialization" required autocomplete="off">
+                            <option value="" disabled selected>Select your specialty</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Dermatology">Dermatology</option>
+                            <option value="Oncology">Oncology</option>
+                            <option value="Psychiatry">Psychiatry</option>
+                            <option value="General Medicine">General Medicine</option>
+                            <option value="Surgery">General Surgery</option>
+                            <option value="Radiology">Radiology</option>
+                            <option value="Anesthesiology">Anesthesiology</option>
+                            <option value="ENT">ENT (Otolaryngology)</option>
+                            <option value="Ophthalmology">Ophthalmology</option>
+                            <option value="Gynecology">Gynecology</option>
+                            <option value="Urology">Urology</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Experience (Years) <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-briefcase left-icon"></i>
+                        <input type="number" id="experience" name="experience" placeholder="5" min="0" required
+                               autocomplete="off" value="">
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="license_number">Medical License Number <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-id-card left-icon"></i>
+                        <input type="text" id="license_number" name="license_number" placeholder="MCI-213045" required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="">
+                    </div>
+                </div>
+
+                <!-- Upload License Document -->
+                <div class="form-group full-width">
+                    <label for="license_document">Upload Medical License / ID (PDF or Image) <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-file-upload left-icon" style="top: 20px;"></i>
+                        <input type="file" id="license_document" name="license_document" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="address">Address <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-location-dot left-icon"></i>
+                        <input type="text" id="address" name="address" placeholder="City, State, Zip" required
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock left-icon"></i>
+                        <input type="password" id="password" name="password" placeholder="Create password" required minlength="8"
+                               autocomplete="new-password" value="">
+                        <button type="button" class="password-toggle" onclick="togglePassword('password', 'eye1')">
+                            <i class="fa-regular fa-eye" id="eye1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password <span class="req-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock left-icon"></i>
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter password" required minlength="8"
+                               autocomplete="new-password" value="">
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirm_password', 'eye2')">
+                            <i class="fa-regular fa-eye" id="eye2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group full-width" style="margin-top: 10px; margin-bottom: 0;">
+                    <button type="submit" class="submit-btn">
+                        <i class="fa-solid fa-paper-plane"></i> Register Account
+                    </button>
+                </div>
+
+            </div>
+        </form>
+
+        <!-- Back to Home Link -->
+        <div class="back-home-wrapper">
+            <a href="{{ url_for('home') }}">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function togglePassword(fieldId, iconId) {
+        const p = document.getElementById(fieldId);
+        const e = document.getElementById(iconId);
+        if (p.type === "password") {
+            p.type = "text";
+            e.classList.remove("fa-eye");
+            e.classList.add("fa-eye-slash");
+        } else {
+            p.type = "password";
+            e.classList.remove("fa-eye-slash");
+            e.classList.add("fa-eye");
+        }
+    }
+
+    // Force-clear all text/email/password fields on page load
+    window.addEventListener('load', function () {
+        const fields = ['first_name','last_name','email','phone','experience','license_number','address','password','confirm_password'];
+        fields.forEach(function(id){
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        document.getElementById('hospital_id').selectedIndex = 0;
+        document.getElementById('specialization').selectedIndex = 0;
+        document.getElementById('license_document').value = '';
+
+        // --- NEW: Keep Flash Message on screen for 6 seconds ---
+        const flashMsg = document.getElementById('flash-msg');
+        if (flashMsg) {
+            setTimeout(() => {
+                flashMsg.classList.add('fade-out');
+                // Optional: Remove from DOM entirely after fade out finishes
+                setTimeout(() => flashMsg.remove(), 1000); 
+            }, 6000); // 6000 milliseconds = 6 seconds
+        }
+    });
+
+    // Also clear when page is restored from browser cache (back button)
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            const fields = ['first_name','last_name','email','phone','experience','license_number','address','password','confirm_password'];
+            fields.forEach(function(id){
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.getElementById('hospital_id').selectedIndex = 0;
+            document.getElementById('specialization').selectedIndex = 0;
+            document.getElementById('license_document').value = '';
+        }
+    });
+</script>
+
+</body>
+</html>

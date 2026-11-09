@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Hospital | MediSecure</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+
+body {
+    min-height:100vh;
+    background:#0a0a0a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px 0;
+}
+
+.container { width:90%; max-width:600px; }
+
+.logo { text-align:center; color:#e0e0e0; font-size:32px; font-weight:700; margin-bottom:25px; }
+.logo i { color:#4a7ab5; }
+
+.card {
+    background:#111111;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.8);
+    border:1px solid #222222;
+}
+
+.heading { display:flex; justify-content:center; align-items:center; gap:12px; color:#4a7ab5; }
+.heading i { font-size:35px; }
+.heading h1 { font-size:30px; }
+
+.subtitle { text-align:center; color:#888888; margin:15px 0 25px; }
+
+.input-box { margin-bottom:18px; }
+.input-box label { display:block; font-weight:600; margin-bottom:7px; color:#b0b0b0; }
+
+/* Red star style */
+.required-star { color: #ff4d4d; font-size: 18px; margin-left: 4px; }
+
+.input-box input,
+.input-box textarea,
+.input-box select {
+    width:100%;
+    padding:13px;
+    border-radius:10px;
+    border:1px solid #2a2a2a;
+    background:#1a1a1a;
+    color:#e0e0e0;
+    font-size:15px;
+}
+
+.input-box input:focus,
+.input-box textarea:focus,
+.input-box select:focus {
+    outline:none;
+    border-color:#4a7ab5;
+}
+
+/* File upload specific styling */
+.input-box input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
+    color: #b0b0b0;
+}
+
+.input-box input[type="file"]::file-selector-button {
+    padding: 10px 16px;
+    margin-right: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #1e3a5f;
+    color: #e0f0ff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.input-box input[type="file"]::file-selector-button:hover {
+    background: #2a4a7a;
+}
+
+/* Red border if missing */
+.input-error {
+    border: 1px solid #ff4d4d !important;
+    background: #2a1414 !important;
+}
+
+.file-hint { font-size: 12px; color: #777777; margin-top: 6px; }
+
+.error-text {
+    color: #ff4d4d;
+    font-size: 13px;
+    margin-top: 6px;
+    display: none;
+    font-weight: 500;
+}
+
+.btn {
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#1e3a5f;
+    color:#e0f0ff;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.btn:hover { background:#2a4a7a; }
+
+.back {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    width:fit-content;
+    margin:20px auto 0;
+    padding:14px 32px;
+    background:#2563eb;
+    color:#ffffff;
+    text-decoration:none;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:600;
+    transition:background 0.2s ease;
+}
+
+.back:hover { background:#1d4ed8; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="logo">
+    <i class="fa-solid fa-heart-pulse"></i> MediSecure
+</div>
+
+<div class="card">
+    <div class="heading">
+        <i class="fa-solid fa-hospital"></i>
+        <h1>Add Hospital</h1>
+    </div>
+
+    <p class="subtitle">Register hospitals for secure medical communication</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div style="background:#1a3a2a; color:#6ee7a0; padding:12px; border-radius:8px; margin-bottom:15px; text-align:center; font-weight:bold;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/add_hospital" enctype="multipart/form-data" id="hospitalForm">
+
+        <div class="input-box">
+            <label>Hospital Name <span class="required-star">*</span></label>
+            <input type="text" name="hospital_name" required>
+        </div>
+
+        <div class="input-box">
+            <label>Registration ID <span class="required-star">*</span></label>
+            <input type="text" name="registration_id" required>
+        </div>
+
+        <div class="input-box">
+            <label>Email <span class="required-star">*</span></label>
+            <input type="email" name="email" required>
+        </div>
+
+        <div class="input-box">
+            <label>Phone Number <span class="required-star">*</span></label>
+            <input type="tel" name="phone" maxlength="10" required>
+        </div>
+
+        <div class="input-box">
+            <label>City <span class="required-star">*</span></label>
+            <input type="text" name="location" required>
+        </div>
+
+        <div class="input-box">
+            <label>Address</label>
+            <textarea name="address"></textarea>
+        </div>
+
+        <div class="input-box">
+            <label>Specialization <span class="required-star">*</span></label>
+            <select name="specialization" required>
+                <option value="" disabled selected>Select Specialization</option>
+                <option>Multi Speciality</option>
+                <option>Cardiology</option>
+                <option>Neurology</option>
+                <option>Orthopedics</option>
+                <option>General Medicine</option>
+                <option>Pediatrics</option>
+                <option>Oncology</option>
+            </select>
+        </div>
+
+        <!-- PDF Upload Box -->
+        <div class="input-box">
+            <label>
+                <i class="fa-solid fa-file-pdf" style="color:#e05252; margin-right:6px;"></i> 
+                Doctor Details PDF <span class="required-star">*</span>
+            </label>
+            <!-- Added accept=".pdf" to strictly limit to PDFs -->
+            <input type="file" name="doctor_pdf" id="doctor_pdf" accept="application/pdf,.pdf" required>
+            <p class="file-hint">Upload a PDF file related to the doctors.</p>
+            <p class="error-text" id="pdf-error">
+                <i class="fa-solid fa-circle-exclamation"></i> You must upload a PDF to register the hospital.
+            </p>
+        </div>
+
+        <button class="btn" type="submit">
+            <i class="fa-solid fa-circle-plus"></i> Register Hospital
+        </button>
+
+    </form>
+</div>
+
+<a href="/admin_dashboard" class="back">
+    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+</a>
+</div>
+
+<script>
+// Auto-hide flash messages
+setTimeout(function () {
+    let msg = document.querySelector("div[style*='background:#1a3a2a']");
+    if (msg) { msg.style.display = "none"; }
+}, 3000);
+
+// Frontend Validation: Block form submission if no PDF is selected
+document.getElementById('hospitalForm').addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('doctor_pdf');
+    const errorText = document.getElementById('pdf-error');
+    
+    // Check if file is missing
+    if (fileInput.files.length === 0) {
+        e.preventDefault(); // Stop form submission
+        fileInput.classList.add('input-error'); // Add red border
+        errorText.style.display = 'block'; // Show error text
+        fileInput.focus();
+    } else {
+        // Check if the file is actually a PDF
+        const fileName = fileInput.files[0].name;
+        if (!fileName.toLowerCase().endsWith('.pdf')) {
+            e.preventDefault();
+            fileInput.classList.add('input-error');
+            errorText.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Only PDF files are allowed.';
+            errorText.style.display = 'block';
+            fileInput.focus();
+        }
+    }
+});
+
+// Clear error once the user selects a valid file
+document.getElementById('doctor_pdf').addEventListener('change', function() {
+    const errorText = document.getElementById('pdf-error');
+    if (this.files.length > 0) {
+        this.classList.remove('input-error');
+        errorText.style.display = 'none';
+    }
+});
+</script>
+
+</body>
+</html>

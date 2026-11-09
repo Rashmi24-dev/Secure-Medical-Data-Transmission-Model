@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Secure Report | MediSecure</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #121212;
+            padding: 30px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: #e5e7eb;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* ================= TOP BAR ================= */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1f1f1f;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #2d3748;
+        }
+
+        .top-bar h2 {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-bar h2 i {
+            color: #3b82f6;
+        }
+
+        .back-btn {
+            color: white;
+            background: #3b82f6;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        /* ================= CARD ================= */
+        .card {
+            background: #1f1f1f;
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid #2d3748;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin: 0 0 30px;
+            font-size: 14px;
+        }
+
+        /* ================= FLASH MESSAGES ================= */
+        .flash-messages { margin-bottom: 20px; }
+        .flash-message {
+            padding: 13px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        .flash-message.success { background: #065f46; color: #34d399; border-left: 4px solid #34d399; }
+        .flash-message.error { background: #7f1d1d; color: #fca5a5; border-left: 4px solid #fca5a5; }
+        .flash-message.warning { background: #78350f; color: #fbbf24; border-left: 4px solid #fbbf24; }
+        .flash-message.info { background: #1e3a5f; color: #60a5fa; border-left: 4px solid #60a5fa; }
+
+        /* ================= FORM ================= */
+        .input-box { margin-bottom: 22px; }
+        .input-box label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e5e7eb;
+        }
+        .required { color: #f87171; }
+
+        .input-box select, .input-box input, .input-box textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+            background: #2d3748;
+            color: #e5e7eb;
+        }
+        .input-box select:focus, .input-box input:focus, .input-box textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .input-box textarea { resize: vertical; min-height: 100px; }
+        .input-box small { color: #94a3b8 !important; display: block; margin-top: 6px; font-size: 13px; }
+
+        /* ================= REPORT BOX ================= */
+        .report-box {
+            background: #2d3748;
+            border: 1px solid #374151;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .report-box-title {
+            color: #60a5fa;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+        .report-info {
+            display: none;
+            background: #1f1f1f;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #374151;
+        }
+        .report-info.active { display: block; }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 9px 0;
+            border-bottom: 1px solid #2d3748;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { font-weight: 600; color: #94a3b8; }
+        .detail-value { color: #60a5fa; text-align: right; word-break: break-word; }
+
+        /* ================= AI SUMMARY SECTION ================= */
+        .ai-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #4b5563;
+        }
+        .btn-ai {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-ai:hover { background: #7c3aed; }
+        .ai-summary-box {
+            background: #1e293b;
+            border-left: 4px solid #8b5cf6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .ai-summary-box h4 {
+            color: #a78bfa;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-summary-box p {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* ================= SECURITY BOX ================= */
+        .security-box {
+            background: #2d3748;
+            border: 1px solid #374151;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .security-title {
+            text-align: center;
+            color: #60a5fa;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+        .security-items {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .security-item {
+            background: #1f1f1f;
+            border-radius: 10px;
+            padding: 15px 8px;
+            text-align: center;
+            border: 1px solid #374151;
+            transition: 0.3s;
+        }
+        .security-item:hover { border-color: #3b82f6; }
+        .security-item i { font-size: 24px; color: #3b82f6; margin-bottom: 8px; }
+        .security-item strong { display: block; font-size: 13px; color: #e5e7eb; }
+        .security-item span { display: block; font-size: 11px; color: #94a3b8; margin-top: 3px; }
+
+        /* ================= SEND BUTTON ================= */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #2563eb; transform: translateY(-2px); }
+        .btn:disabled { background: #4b5563; cursor: not-allowed; transform: none; }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 650px) {
+            .card { padding: 25px 20px; }
+            .security-items { grid-template-columns: repeat(2, 1fr); }
+            .detail-row { flex-direction: column; gap: 3px; }
+            .detail-value { text-align: left; }
+            .top-bar { flex-direction: column; text-align: center; gap: 10px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================= TOP BAR ================= -->
+    <div class="top-bar">
+        <h2>
+            <i class="fa-solid fa-paper-plane"></i>
+            Send Secure Report
+        </h2>
+        <a href="{{ url_for('doctor_dashboard', doctor_id=doctor_id) }}" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <!-- ================= CARD ================= -->
+    <div class="card">
+
+        <p class="subtitle">Securely transmit a medical report to another doctor.</p>
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fa-solid {% if category == 'success' %}fa-circle-check{% else %}fa-circle-xmark{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- FORM -->
+        <form method="POST" action="{{ url_for('send_secure_report', doctor_id=doctor_id) }}" id="sendForm">
+
+            <!-- ================= SELECT REPORT ================= -->
+            <div class="report-box">
+                <div class="report-box-title">
+                    <i class="fa-solid fa-file-medical"></i> Select Medical Report
+                </div>
+
+                <div class="input-box">
+                    <label>Medical Report <span class="required">*</span></label>
+                    <select name="report_id" id="reportSelect" required onchange="showReportDetails()">
+                        <option value="">Select an uploaded report</option>
+                        {% for report in reports %}
+                        <option
+                            value="{{ report.report_id }}"
+                            data-patient="{{ report.patient_name or 'N/A' }}"
+                            data-number="{{ report.patient_number or 'N/A' }}"
+                            data-age="{{ report.age or 'N/A' }}"
+                            data-gender="{{ report.gender or 'N/A' }}"
+                            data-diagnosis="{{ report.diagnosis or 'N/A' }}"
+                            data-pdf="{{ report.report_file or 'Not available' }}"
+                            data-xray="{{ report.xray_image or 'Not available' }}"
+                            data-summary="{{ report.ai_summary or '' }}"
+                        >
+                            Report #{{ report.report_id }} - {{ report.patient_name or 'Unknown Patient' }}
+                        </option>
+                        {% else %}
+                        <option value="" disabled>No uploaded reports available</option>
+                        {% endfor %}
+                    </select>
+                    <small>Only reports uploaded by you and not yet sent are shown.</small>
+                </div>
+
+                <!-- REPORT DETAILS -->
+                <div class="report-info" id="reportInfo">
+                    <div class="detail-row">
+                        <span class="detail-label">Patient Name</span>
+                        <span class="detail-value" id="patientName">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Patient Number</span>
+                        <span class="detail-value" id="patientNumber">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Age</span>
+                        <span class="detail-value" id="patientAge">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Gender</span>
+                        <span class="detail-value" id="patientGender">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Diagnosis</span>
+                        <span class="detail-value" id="patientDiagnosis">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Prescription PDF</span>
+                        <span class="detail-value" id="pdfFile">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">X-Ray / Medical Image</span>
+                        <span class="detail-value" id="xrayFile">-</span>
+                    </div>
+
+                    <!-- AI SUMMARY SECTION -->
+                    <div class="ai-section">
+                        <div id="aiButtonContainer" style="display: none;">
+                            <button type="button" class="btn-ai" onclick="generateAISummary()">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate AI Summary for this Report
+                            </button>
+                        </div>
+                        <div class="ai-summary-box" id="aiSummaryContainer" style="display: none;">
+                            <h4><i class="fa-solid fa-robot"></i> AI Medical Summary</h4>
+                            <p id="aiSummaryText"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ================= RECEIVER ================= -->
+            <div class="input-box">
+                <label>Receiver Doctor <span class="required">*</span></label>
+                <select name="receiver_id" id="receiverDoctor" required>
+                    <option value="">Select receiving doctor</option>
+                    {% for doctor in doctors %}
+                    <option value="{{ doctor.doctor_id }}">
+                        Dr. {{ doctor.doctor_name }} - {{ doctor.specialization }} ({{ doctor.email }})
+                    </option>
+                    {% else %}
+                    <option value="" disabled>No other active doctors available</option>
+                    {% endfor %}
+                </select>
+                <small>The report will be encrypted using this doctor's RSA public key.</small>
+            </div>
+
+            <!-- ================= MESSAGE ================= -->
+            <div class="input-box">
+                <label>Message to Receiver Doctor</label>
+                <textarea name="message" placeholder="Enter additional information or notes for the receiving doctor..."></textarea>
+            </div>
+
+            <!-- ================= SECURITY PROCESS ================= -->
+            <div class="security-box">
+                <div class="security-title">
+                    <i class="fa-solid fa-shield-halved"></i> Secure Transmission Process
+                </div>
+                <div class="security-items">
+                    <div class="security-item">
+                        <i class="fa-solid fa-lock"></i>
+                        <strong>AES-256</strong>
+                        <span>PDF Encryption</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fa-solid fa-key"></i>
+                        <strong>RSA-2048</strong>
+                        <span>Key Protection</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fa-solid fa-image"></i>
+                        <strong>DWT</strong>
+                        <span>Steganography</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fa-solid fa-fingerprint"></i>
+                        <strong>SHA-256</strong>
+                        <span>Integrity Check</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= SEND ================= -->
+            <button type="submit" class="btn" id="sendButton">
+                <i class="fa-solid fa-shield-halved"></i> Send Secure Report
+            </button>
+
+        </form>
+    </div>
+</div>
+
+<!-- Hidden form specifically for generating AI summary -->
+<form id="aiSummaryForm" method="POST" style="display: none;"></form>
+
+<script>
+/* =========================================================
+   SHOW SELECTED REPORT DETAILS
+========================================================= */
+function showReportDetails() {
+    const select = document.getElementById("reportSelect");
+    const selected = select.options[select.selectedIndex];
+    const reportInfo = document.getElementById("reportInfo");
+
+    if (!select.value) {
+        reportInfo.classList.remove("active");
+        return;
+    }
+
+    // Populate basic details
+    document.getElementById("patientName").textContent = selected.dataset.patient || "N/A";
+    document.getElementById("patientNumber").textContent = selected.dataset.number || "N/A";
+    document.getElementById("patientAge").textContent = selected.dataset.age || "N/A";
+    document.getElementById("patientGender").textContent = selected.dataset.gender || "N/A";
+    document.getElementById("patientDiagnosis").textContent = selected.dataset.diagnosis || "N/A";
+    document.getElementById("pdfFile").textContent = selected.dataset.pdf || "N/A";
+    document.getElementById("xrayFile").textContent = selected.dataset.xray || "N/A";
+
+    // Handle AI Summary UI
+    const summaryText = selected.dataset.summary;
+    const aiButtonContainer = document.getElementById("aiButtonContainer");
+    const aiSummaryContainer = document.getElementById("aiSummaryContainer");
+    const aiSummaryText = document.getElementById("aiSummaryText");
+
+    if (summaryText && summaryText.trim() !== "") {
+        aiButtonContainer.style.display = "none";
+        aiSummaryContainer.style.display = "block";
+        aiSummaryText.textContent = summaryText;
+    } else {
+        aiButtonContainer.style.display = "block";
+        aiSummaryContainer.style.display = "none";
+        aiSummaryText.textContent = "";
+    }
+
+    reportInfo.classList.add("active");
+}
+
+/* =========================================================
+   GENERATE AI SUMMARY
+========================================================= */
+function generateAISummary() {
+    const select = document.getElementById("reportSelect");
+    const reportId = select.value;
+    
+    if (!reportId) {
+        alert("Please select a report first.");
+        return;
+    }
+
+    const aiForm = document.getElementById("aiSummaryForm");
+    const pathParts = window.location.pathname.split('/');
+    const doctorId = pathParts[pathParts.length - 1]; 
+    
+    aiForm.action = `/generate_ai_summary/${doctorId}/${reportId}`;
+    aiForm.submit();
+}
+
+/* =========================================================
+   RESTORE SELECTION ON PAGE LOAD (Reads from Flask)
+========================================================= */
+document.addEventListener("DOMContentLoaded", function() {
+    // This pulls the ID directly from the variable Flask passed to the template
+    const preselectedReportId = "{{ selected_report_id|default('') }}";
+    
+    if (preselectedReportId) {
+        const select = document.getElementById("reportSelect");
+        // Only set the value if the option actually exists in the dropdown
+        if (select.querySelector(`option[value="${preselectedReportId}"]`)) {
+            select.value = preselectedReportId;
+            showReportDetails(); // Trigger the display
+        }
+    }
+});
+
+/* =========================================================
+   SEND BUTTON LOADING STATE
+========================================================= */
+document.getElementById('sendForm')?.addEventListener('submit', function() {
+    const btn = document.getElementById('sendButton');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Encrypting & Sending...';
+    btn.style.background = '#4b5563';
+});
+</script>
+
+</body>
+</html>

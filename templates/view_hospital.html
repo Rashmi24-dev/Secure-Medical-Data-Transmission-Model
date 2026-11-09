@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>View Hospitals | MediSecure</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#0a0a0a;
+padding:40px;
+}
+
+.container{
+width:95%;
+margin:auto;
+}
+
+/* Updated Title layout to push button to the right */
+.title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.title h1{
+color:#4a7ab5;
+font-size: 28px;
+}
+
+.btn{
+background:#1e3a5f;
+color:#e0f0ff;
+padding:12px 20px;
+text-decoration:none;
+border-radius:8px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:#111111;
+box-shadow:0 5px 15px rgba(0,0,0,.6);
+border-radius: 8px; /* Added slight rounding to table */
+overflow: hidden;
+}
+
+th{
+background:#1e3a5f;
+color:#e0f0ff;
+padding:14px;
+}
+
+td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid #2a2a2a;
+color:#e0e0e0;
+}
+
+tr:hover{
+background:#1a1a1a;
+}
+
+/* Added gap to action buttons so they don't touch */
+td.actions-cell {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.edit{
+background:#1a3a2a;
+padding:8px 14px;
+color:#6ee7a0;
+text-decoration:none;
+border-radius:5px;
+}
+
+.delete{
+background:#3a1a1a;
+padding:8px 14px;
+color:#ff8080;
+text-decoration:none;
+border-radius:5px;
+}
+
+/* New style for the PDF button */
+.view-pdf {
+background:#4a1a1a;
+padding:8px 14px;
+color:#ff9999;
+text-decoration:none;
+border-radius:5px;
+}
+
+/* =========================================
+   UPGRADED BACK BUTTON (Now at the top)
+   ========================================= */
+.btn-back-dashboard {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #1a56ff; 
+    color: #ffffff;
+    padding: 12px 24px; /* Slightly smaller padding to fit nicely at the top */
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 15px rgba(26, 86, 255, 0.2); 
+}
+
+.btn-back-dashboard i {
+    font-size: 16px;
+    transition: transform 0.2s ease;
+}
+
+/* Hover Effects */
+.btn-back-dashboard:hover {
+    background-color: #1545d1;
+    box-shadow: 0 6px 20px rgba(26, 86, 255, 0.4);
+    transform: translateY(-2px); 
+}
+
+/* Animate the arrow on hover */
+.btn-back-dashboard:hover i {
+    transform: translateX(-4px);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- BUTTON MOVED TO THE TOP TITLE BAR -->
+<div class="title">
+    <h1><i class="fa-solid fa-hospital"></i> Registered Hospitals</h1>
+    
+    <a href="{{ url_for('admin_dashboard') }}" class="btn-back-dashboard">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Dashboard
+    </a>
+</div>
+
+<table>
+
+<tr>
+
+<th>ID</th>
+<th>Hospital Name</th>
+<th>Registration ID</th>
+<th>Email</th>
+<th>Phone</th>
+<th>City</th>
+<th>Specialization</th>
+<th>Actions</th>
+
+</tr>
+
+{% for hospital in hospitals %}
+
+<tr>
+
+<td>{{ hospital.hospital_id }}</td>
+
+<td>{{ hospital.hospital_name }}</td>
+
+<td>{{ hospital.registration_id }}</td>
+
+<td>{{ hospital.email }}</td>
+
+<td>{{ hospital.phone }}</td>
+
+<td>{{ hospital.location }}</td>
+
+<td>{{ hospital.specialization }}</td>
+
+<td class="actions-cell">
+
+<!-- NEW: View PDF Button -->
+{% if hospital.doctor_pdf %}
+<a href="{{ url_for('view_hospital_pdf', hospital_id=hospital.hospital_id) }}" target="_blank" class="view-pdf" title="View Doctor PDF">
+    <i class="fa-solid fa-file-pdf"></i>
+</a>
+{% endif %}
+
+<a href="/edit_hospital/{{ hospital.hospital_id }}" class="edit" title="Edit">
+<i class="fa-solid fa-pen"></i>
+</a>
+
+<a href="/delete_hospital/{{ hospital.hospital_id }}" class="delete" title="Delete">
+<i class="fa-solid fa-trash"></i>
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

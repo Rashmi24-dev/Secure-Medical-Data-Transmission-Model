@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Doctors | MediSecure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #0a0a0a; min-height: 100vh; padding: 25px; }
+        .container { max-width: 1300px; margin: auto; background: #111111; border-radius: 24px; padding: 35px 40px 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); border: 1px solid #222222; }
+
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        h1 { color: #e0e0e0; font-size: 30px; display: flex; align-items: center; gap: 12px; }
+        h1 i { color: #4a7ab5; }
+        .header-left p { color: #888888; margin-top: 5px; font-size: 14px; }
+        .header-left p i { margin-right: 6px; color: #4a7ab5; }
+
+        .header-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+        .btn { padding: 12px 22px; border-radius: 12px; text-decoration: none; border: none; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; font-family: 'Poppins', sans-serif; font-size: 14px; transition: all 0.3s ease; }
+        .btn-outline { border: 2px solid #2a2a2a; background: #1a1a1a; color: #b0b0b0; }
+        .btn-outline:hover { border-color: #4a7ab5; color: #e0e0e0; background: #1e1e1e; }
+
+        .btn-back-dashboard {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background-color: #1a56ff; color: #ffffff;
+            padding: 12px 24px; font-size: 14px; font-weight: 600;
+            text-decoration: none; border-radius: 12px; border: none;
+            cursor: pointer; transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 15px rgba(26, 86, 255, 0.2);
+        }
+        .btn-back-dashboard i { font-size: 16px; transition: transform 0.2s ease; }
+        .btn-back-dashboard:hover { background-color: #1545d1; box-shadow: 0 6px 20px rgba(26, 86, 255, 0.4); transform: translateY(-2px); }
+        .btn-back-dashboard:hover i { transform: translateX(-4px); }
+
+        .stats-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 25px; }
+        .stat-item { background: #1a1a1a; padding: 16px 20px; border-radius: 12px; border: 1px solid #2a2a2a; display: flex; align-items: center; gap: 14px; }
+        .stat-item .stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .stat-item:nth-child(1) .stat-icon { background: #1a2a3a; color: #4a7ab5; }
+        .stat-item:nth-child(2) .stat-icon { background: #1a3a2a; color: #27ae60; }
+        .stat-item:nth-child(3) .stat-icon { background: #3a2a10; color: #f39c12; }
+        .stat-item:nth-child(4) .stat-icon { background: #3a1a1a; color: #e74c3c; }
+        .stat-item .stat-info .stat-number { font-size: 22px; font-weight: 700; color: #e0e0e0; }
+        .stat-item .stat-info .stat-label { font-size: 13px; color: #888888; }
+
+        .search-box { background: #1a1a1a; padding: 18px 20px; border-radius: 14px; display: flex; gap: 14px; margin-bottom: 25px; border: 1px solid #2a2a2a; flex-wrap: wrap; align-items: center; }
+        .search-box .search-wrapper { flex: 1; min-width: 200px; position: relative; }
+        .search-box .search-wrapper i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #555555; }
+        .search-box .search-wrapper input { width: 100%; padding: 11px 16px 11px 42px; border: 2px solid #2a2a2a; border-radius: 10px; font-size: 14px; font-family: 'Poppins', sans-serif; background: #0e0e0e; color: #e0e0e0; transition: all 0.3s ease; }
+        .search-box .search-wrapper input:focus { outline: none; border-color: #4a7ab5; box-shadow: 0 0 0 4px rgba(74, 122, 181, 0.15); }
+        .search-box .filter-select { padding: 11px 16px; border: 2px solid #2a2a2a; border-radius: 10px; font-size: 14px; font-family: 'Poppins', sans-serif; background: #0e0e0e; color: #e0e0e0; cursor: pointer; transition: all 0.3s ease; min-width: 150px; }
+        .search-box .filter-select:focus { outline: none; border-color: #4a7ab5; }
+        .search-box .btn-search { padding: 11px 28px; background: #1e3a5f; color: #e0f0ff; border: 1px solid #2a4a7a; border-radius: 10px; font-size: 14px; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .search-box .btn-search:hover { background: #2a4a7a; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(74, 122, 181, 0.4); }
+
+        .table-container { overflow-x: auto; border-radius: 14px; border: 1px solid #2a2a2a; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        thead { background: #1e3a5f; }
+        th { color: #e0f0ff; padding: 16px 18px; text-align: left; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 14px 18px; border-bottom: 1px solid #222222; color: #c0c0c0; font-size: 14px; vertical-align: middle; }
+        tr:hover td { background: #1a1a1a; }
+        tr:last-child td { border-bottom: none; }
+
+        .doctor-avatar { width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; color: white; flex-shrink: 0; }
+
+        .status { padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .status.Active { background: #1a3a2a; color: #6ee7a0; }
+        .status.Active::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #6ee7a0; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite; }
+        .status.Inactive { background: #3a1a1a; color: #ff8080; }
+        .status.On-Leave { background: #3a2a10; color: #f0b060; }
+        .status.Pending { background: #3a2a10; color: #f0b060; border: 1px solid #f0b060; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .action-buttons { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .action-buttons form { margin: 0; display: inline-flex; }
+
+        /* APPROVE BUTTON (now a <button>) */
+        .btn-approve {
+            background: #1a3a2a; color: #6ee7a0; padding: 6px 12px; border-radius: 6px;
+            border: 1px solid #27ae60; cursor: pointer; font-size: 11px; font-weight: 600;
+            font-family: 'Poppins', sans-serif; transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 4px; text-decoration: none;
+        }
+        .btn-approve:hover { background: #27ae60; color: #ffffff; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3); }
+
+        /* FORCE APPROVE (secondary) */
+        .btn-force {
+            background: #3a2a10; color: #f0b060; padding: 6px 10px; border-radius: 6px;
+            border: 1px solid #f0b060; cursor: pointer; font-size: 11px; font-weight: 600;
+            font-family: 'Poppins', sans-serif; transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 4px; text-decoration: none;
+        }
+        .btn-force:hover { background: #f0b060; color: #111; transform: translateY(-1px); }
+
+        .btn-profile { background: #1e3a5f; color: #60a5fa; padding: 6px 12px; border-radius: 6px; border: 1px solid #3b82f6; cursor: pointer; font-size: 11px; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+        .btn-profile:hover { background: #3b82f6; color: #ffffff; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
+
+        .btn-edit { background: #3a2a10; color: #f0b060; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 11px; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+        .btn-edit:hover { background: #4a3a18; color: #ffc870; transform: translateY(-1px); }
+
+        .btn-delete { background: #3a1a1a; color: #ff8080; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 11px; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+        .btn-delete:hover { background: #4a2020; color: #ff9999; transform: translateY(-1px); }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: #888888; }
+        .empty-state i { font-size: 56px; color: #333333; margin-bottom: 16px; }
+        .empty-state h3 { color: #e0e0e0; margin-bottom: 6px; font-size: 20px; }
+        .empty-state p { font-size: 14px; }
+
+        .flash-messages { margin-bottom: 20px; }
+        .flash-message { padding: 14px 20px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; font-weight: 500; animation: slideDown 0.4s ease; }
+        .flash-message.success { background: #1a3a2a; color: #6ee7a0; border-left: 4px solid #6ee7a0; }
+        .flash-message.error { background: #3a1a1a; color: #ff8080; border-left: 4px solid #ff8080; }
+        .flash-message.info { background: #1a2a3a; color: #60a5fa; border-left: 4px solid #60a5fa; }
+        .flash-message.warning { background: #3a2a10; color: #f0b060; border-left: 4px solid #f0b060; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .stats-summary { grid-template-columns: 1fr 1fr; }
+            .search-box { flex-direction: column; }
+            .search-box .filter-select { width: 100%; }
+            .search-box .btn-search { width: 100%; justify-content: center; }
+            .action-buttons { flex-direction: column; align-items: stretch; }
+            .action-buttons form { width: 100%; }
+            .action-buttons .btn-approve, .action-buttons .btn-force, .action-buttons .btn-profile,
+            .action-buttons .btn-edit, .action-buttons .btn-delete { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="page-header">
+            <div class="header-left">
+                <h1>
+                    <i class="fa-solid fa-users"></i>
+                    View Doctors
+                </h1>
+                <p>
+                    <i class="fa-solid fa-user-md"></i>
+                    Manage all registered doctors in the system
+                </p>
+            </div>
+
+            <div class="header-actions">
+                <a href="{{ url_for('view_doctors') }}" class="btn btn-outline">
+                    <i class="fa-solid fa-rotate"></i> Refresh
+                </a>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn-back-dashboard">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'info' %}fa-circle-info{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-xmark{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="stats-summary">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ doctors|length }}</div>
+                    <div class="stat-label">Total Doctors</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ doctors|selectattr('status', 'equalto', 'Active')|list|length }}</div>
+                    <div class="stat-label">Active Doctors</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fa-solid fa-stethoscope"></i></div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ doctors|map(attribute='specialization')|unique|list|length }}</div>
+                    <div class="stat-label">Specializations</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fa-solid fa-hospital"></i></div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ doctors|map(attribute='hospital_name')|unique|list|length }}</div>
+                    <div class="stat-label">Hospitals</div>
+                </div>
+            </div>
+        </div>
+
+        <form method="GET" action="{{ url_for('view_doctors') }}" class="search-box">
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" name="search" placeholder="Search by name, specialization, or hospital..." value="{{ search_query or '' }}">
+            </div>
+            <select class="filter-select" name="status">
+                <option value="all" {% if status_filter == 'all' or not status_filter %}selected{% endif %}>All Status</option>
+                <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Active" {% if status_filter == 'Active' %}selected{% endif %}>Active</option>
+                <option value="Inactive" {% if status_filter == 'Inactive' %}selected{% endif %}>Inactive</option>
+                <option value="On Leave" {% if status_filter == 'On Leave' %}selected{% endif %}>On Leave</option>
+            </select>
+            <select class="filter-select" name="specialization">
+                <option value="all" {% if spec_filter == 'all' or not spec_filter %}selected{% endif %}>All Specializations</option>
+                {% set unique_specs = [] %}
+                {% for doctor in doctors %}
+                    {% if doctor.specialization not in unique_specs %}
+                        {% set _ = unique_specs.append(doctor.specialization) %}
+                    {% endif %}
+                {% endfor %}
+                {% for spec in unique_specs %}
+                    <option value="{{ spec }}" {% if spec_filter == spec %}selected{% endif %}>{{ spec }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn-search">
+                <i class="fa-solid fa-search"></i> Search
+            </button>
+        </form>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Specialization</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Hospital</th>
+                        <th>Experience</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if doctors %}
+                        {% for doctor in doctors %}
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        {% set colors = ['#0B3D91', '#27ae60', '#f39c12', '#8e44ad', '#e74c3c', '#1abc9c'] %}
+                                        {% set color_index = loop.index0 % 6 %}
+                                        <span class="doctor-avatar" style="background:{{ colors[color_index] }}">
+                                            {{ doctor.doctor_name.split()[0][0] if doctor.doctor_name.split() else doctor.doctor_name[0] }}{{ doctor.doctor_name.split()[1][0] if doctor.doctor_name.split()|length > 1 else '' }}
+                                        </span>
+                                        <div>
+                                            <div style="font-weight:600;color:#e0e0e0;">{{ doctor.doctor_name }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><strong>{{ doctor.specialization }}</strong></td>
+                                <td>{{ doctor.email }}</td>
+                                <td>{{ doctor.phone or 'N/A' }}</td>
+                                <td>{{ doctor.hospital_name }}</td>
+                                <td>{{ doctor.experience or 0 }} yrs</td>
+                                <td>
+                                    <span class="status {{ doctor.status }}">
+                                        {{ doctor.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+
+                                        <a href="{{ url_for('view_doctor', doctor_id=doctor.doctor_id) }}" class="btn-profile">
+                                            <i class="fa-solid fa-eye"></i> Profile
+                                        </a>
+
+                                        {% if doctor.status == 'Pending' %}
+                                        <!-- APPROVE (POST) -->
+                                        <form method="POST"
+                                              action="{{ url_for('approve_doctor', doctor_id=doctor.doctor_id) }}"
+                                              onsubmit="return confirm('Approve Dr. {{ doctor.doctor_name|e }} and send approval email to {{ doctor.email|e }}?');">
+                                            <button type="submit" class="btn-approve">
+                                                <i class="fa-solid fa-check"></i> Approve &amp; Email
+                                            </button>
+                                        </form>
+
+                                        <!-- FORCE APPROVE (POST, no email) -->
+                                        <form method="POST"
+                                              action="{{ url_for('force_approve_doctor', doctor_id=doctor.doctor_id) }}"
+                                              onsubmit="return confirm('Force-approve Dr. {{ doctor.doctor_name|e }} WITHOUT sending any email?');">
+                                            <button type="submit" class="btn-force" title="Approve without sending email">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                            </button>
+                                        </form>
+                                        {% endif %}
+
+                                        <a href="{{ url_for('edit_doctor', doctor_id=doctor.doctor_id) }}" class="btn-edit">
+                                            <i class="fa-solid fa-pen"></i> Edit
+                                        </a>
+                                        <a href="{{ url_for('delete_doctor', doctor_id=doctor.doctor_id) }}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this doctor?')">
+                                            <i class="fa-solid fa-trash-can"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-user-slash"></i>
+                                    <h3>No doctors found</h3>
+                                    <p>Try adjusting your search or filter criteria</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

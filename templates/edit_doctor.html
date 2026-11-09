@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Doctor | MediSecure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #121212;
+            color: #e5e7eb;
+            min-height: 100vh;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: #1f1f1f;
+            border-radius: 24px;
+            padding: 40px 45px 45px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #2d3748;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h1 i {
+            color: #f39c12;
+        }
+
+        .header-left p {
+            color: #94a3b8;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .header-left p i {
+            margin-right: 6px;
+            color: #f39c12;
+        }
+
+        .btn {
+            padding: 12px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1e8449;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b02a37;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid #374151;
+            background: transparent;
+            color: #cbd5e1;
+        }
+
+        .btn-outline:hover {
+            border-color: #3b82f6;
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #e5e7eb;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .form-group label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        .form-group label i {
+            color: #60a5fa;
+            margin-right: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #374151;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            background: #2d3748;
+            transition: all 0.3s ease;
+            color: #e5e7eb;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            background: #2d3748;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #6b7280;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group select option {
+            background: #1f1f1f;
+            color: #e5e7eb;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #2d3748;
+        }
+
+        .form-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            animation: slideDown 0.4s ease;
+        }
+
+        .flash-message.success {
+            background: #064e3b;
+            color: #34d399;
+            border-left: 4px solid #34d399;
+        }
+
+        .flash-message.error {
+            background: #7f1d1d;
+            color: #fca5a5;
+            border-left: 4px solid #fca5a5;
+        }
+
+        .flash-message.warning {
+            background: #78350f;
+            color: #fbbf24;
+            border-left: 4px solid #fbbf24;
+        }
+
+        .flash-message.info {
+            background: #1e3a5f;
+            color: #60a5fa;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .flash-message i {
+            font-size: 20px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ================= BACK TO DASHBOARD - BLUE PILL BUTTON ================= */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 14px 30px;
+            border-radius: 12px;
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+            border: none;
+        }
+
+        .back-link i {
+            font-size: 16px;
+        }
+
+        .back-link:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(37, 99, 235, 0.5);
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        /* Status Badge in form */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .status-badge.Active {
+            background: #064e3b;
+            color: #34d399;
+        }
+
+        .status-badge.Inactive {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .status-badge.On-Leave {
+            background: #78350f;
+            color: #fbbf24;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 25px 20px;
+                border-radius: 18px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions .btn {
+                flex: none;
+                width: 100%;
+            }
+
+            .back-link {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 18px;
+                border-radius: 14px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="header-left">
+                <h1>
+                    <i class="fa-solid fa-user-pen"></i>
+                    Edit Doctor
+                </h1>
+                <p>
+                    <i class="fa-solid fa-user-md"></i>
+                    Update doctor information in the system
+                </p>
+            </div>
+            <a href="{{ url_for('view_doctors') }}" class="btn btn-outline">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'error' %}fa-circle-xmark{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('edit_doctor', doctor_id=doctor.doctor_id) }}">
+
+            <div class="form-group">
+                <label>
+                    <i class="fa-solid fa-user"></i>
+                    Doctor Name <span class="required">*</span>
+                </label>
+                <input type="text" name="doctor_name" value="{{ doctor.doctor_name }}" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>
+                        <i class="fa-solid fa-envelope"></i>
+                        Email <span class="required">*</span>
+                    </label>
+                    <input type="email" name="email" value="{{ doctor.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <i class="fa-solid fa-phone"></i>
+                        Phone
+                    </label>
+                    <input type="text" name="phone" value="{{ doctor.phone or '' }}" placeholder="Enter phone number">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>
+                        <i class="fa-solid fa-stethoscope"></i>
+                        Specialization <span class="required">*</span>
+                    </label>
+                    <select name="specialization" required>
+                        <option value="Cardiology" {% if doctor.specialization == 'Cardiology' %}selected{% endif %}>Cardiology</option>
+                        <option value="Neurology" {% if doctor.specialization == 'Neurology' %}selected{% endif %}>Neurology</option>
+                        <option value="Orthopedics" {% if doctor.specialization == 'Orthopedics' %}selected{% endif %}>Orthopedics</option>
+                        <option value="Pediatrics" {% if doctor.specialization == 'Pediatrics' %}selected{% endif %}>Pediatrics</option>
+                        <option value="Gynecology" {% if doctor.specialization == 'Gynecology' %}selected{% endif %}>Gynecology</option>
+                        <option value="Dermatology" {% if doctor.specialization == 'Dermatology' %}selected{% endif %}>Dermatology</option>
+                        <option value="Ophthalmology" {% if doctor.specialization == 'Ophthalmology' %}selected{% endif %}>Ophthalmology</option>
+                        <option value="ENT" {% if doctor.specialization == 'ENT' %}selected{% endif %}>ENT</option>
+                        <option value="General Medicine" {% if doctor.specialization == 'General Medicine' %}selected{% endif %}>General Medicine</option>
+                        <option value="Oncology" {% if doctor.specialization == 'Oncology' %}selected{% endif %}>Oncology</option>
+                        <option value="Psychiatry" {% if doctor.specialization == 'Psychiatry' %}selected{% endif %}>Psychiatry</option>
+                        <option value="Radiology" {% if doctor.specialization == 'Radiology' %}selected{% endif %}>Radiology</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <i class="fa-solid fa-calendar"></i>
+                        Experience (Years)
+                    </label>
+                    <input type="number" name="experience" value="{{ doctor.experience or 0 }}" min="0" max="60" placeholder="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>
+                        <i class="fa-solid fa-id-card"></i>
+                        License Number
+                    </label>
+                    <input type="text" name="license_number" value="{{ doctor.license_number or '' }}" placeholder="Enter license number">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Status <span class="required">*</span>
+                    </label>
+                    <select name="status" required>
+                        <option value="Active" {% if doctor.status == 'Active' %}selected{% endif %}>Active</option>
+                        <option value="Inactive" {% if doctor.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                        <option value="On Leave" {% if doctor.status == 'On Leave' %}selected{% endif %}>On Leave</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fa-solid fa-hospital"></i>
+                    Hospital <span class="required">*</span>
+                </label>
+                <select name="hospital_id" required>
+                    {% for hospital in hospitals %}
+                        <option value="{{ hospital.hospital_id }}" {% if hospital.hospital_id == doctor.hospital_id %}selected{% endif %}>
+                            {{ hospital.hospital_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Address
+                </label>
+                <textarea name="address" placeholder="Enter complete address">{{ doctor.address or '' }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">
+                    <i class="fa-solid fa-check"></i> Update Doctor
+                </button>
+                <a href="{{ url_for('view_doctors') }}" class="btn btn-danger">
+                    <i class="fa-solid fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+
+        <!-- ================= BACK TO DASHBOARD - BLUE PILL BUTTON ================= -->
+        <a href="{{ url_for('admin_dashboard') }}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <!-- ========================================================================= -->
+
+    </div>
+
+</body>
+</html>

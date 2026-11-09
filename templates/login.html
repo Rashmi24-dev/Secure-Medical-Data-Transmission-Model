@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediSecure | Secure Medical Data Transmission</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f5f8fc;
+            color: #173b52;
+            overflow: hidden;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 82px;
+            background: #123b52;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 4%;
+
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+
+            background: #ff6580;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 38px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #e8f1f6;
+
+            font-size: 16px;
+            font-weight: 500;
+
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ff6580;
+        }
+
+
+        /* ================= HERO ================= */
+
+        .hero {
+            height: calc(100vh - 82px);
+
+            background:
+                radial-gradient(circle at 85% 30%, rgba(78, 190, 230, 0.16), transparent 25%),
+                radial-gradient(circle at 15% 80%, rgba(255, 101, 128, 0.12), transparent 25%),
+                linear-gradient(135deg, #103d55, #164b65);
+
+            display: flex;
+            align-items: center;
+
+            padding: 30px 6%;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        /* Decorative circles */
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .circle-one {
+            width: 400px;
+            height: 400px;
+            right: -150px;
+            top: -120px;
+        }
+
+        .circle-two {
+            width: 280px;
+            height: 280px;
+            left: -150px;
+            bottom: -120px;
+        }
+
+
+        /* ================= LEFT CONTENT ================= */
+
+        .hero-content {
+            width: 50%;
+            color: white;
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .small-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 16px;
+
+            border-radius: 30px;
+
+            background: rgba(255,255,255,0.10);
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            color: #9ee7ff;
+
+            font-size: 13px;
+            font-weight: 500;
+
+            margin-bottom: 20px;
+        }
+
+        .small-title i {
+            color: #ff6580;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            line-height: 1.15;
+
+            font-weight: 800;
+
+            margin-bottom: 18px;
+
+            letter-spacing: -1px;
+        }
+
+        .hero-content h1 span {
+            color: #8edcff;
+        }
+
+        .hero-description {
+            max-width: 650px;
+
+            color: #c9dce5;
+
+            font-size: 16px;
+            line-height: 1.7;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* ================= BUTTONS ================= */
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+
+            margin-bottom: 28px;
+        }
+
+        .btn {
+            padding: 13px 25px;
+
+            border-radius: 30px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #ff6580;
+            color: white;
+
+            box-shadow: 0 8px 25px rgba(255,101,128,0.30);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            background: #ff526f;
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255,255,255,0.25);
+            color: white;
+
+            background: rgba(255,255,255,0.05);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-3px);
+        }
+
+
+        /* ================= FEATURE CARDS ================= */
+
+        .features {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 10px;
+
+            max-width: 680px;
+        }
+
+        .feature {
+            background: rgba(255,255,255,0.08);
+
+            border: 1px solid rgba(255,255,255,0.10);
+
+            border-radius: 12px;
+
+            padding: 12px 10px;
+
+            backdrop-filter: blur(10px);
+
+            transition: 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-4px);
+
+            background: rgba(255,255,255,0.12);
+        }
+
+        .feature-icon {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 9px;
+
+            background: rgba(255,101,128,0.18);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #ff8198;
+
+            margin-bottom: 7px;
+        }
+
+        .feature h3 {
+            font-size: 12px;
+            color: white;
+
+            margin-bottom: 2px;
+        }
+
+        .feature p {
+            font-size: 10px;
+            color: #b9d0db;
+        }
+
+
+        /* ================= RIGHT SIDE ================= */
+
+        .visual {
+            width: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* ================= SECURITY CARD ================= */
+
+        .security-card {
+
+            width: 440px;
+
+            padding: 25px;
+
+            border-radius: 24px;
+
+            background: rgba(255,255,255,0.10);
+
+            border: 1px solid rgba(255,255,255,0.18);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow: 0 25px 60px rgba(0,0,0,0.22);
+
+            position: relative;
+        }
+
+
+        /* Card Header */
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            color: white;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .card-title i {
+            color: #ff7189;
+        }
+
+        .secure-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            font-size: 10px;
+
+            color: #8ff0ba;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #5be59a;
+
+            box-shadow: 0 0 10px #5be59a;
+        }
+
+
+        /* ================= FLOW ================= */
+
+        .flow {
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .flow-item {
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            background: rgba(255,255,255,0.08);
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            padding: 10px 13px;
+
+            border-radius: 12px;
+
+            color: white;
+        }
+
+        .flow-icon {
+
+            width: 35px;
+            height: 35px;
+
+            border-radius: 9px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(142,220,255,0.13);
+
+            color: #8edcff;
+
+            font-size: 14px;
+
+            flex-shrink: 0;
+        }
+
+        .flow-text {
+            flex: 1;
+        }
+
+        .flow-text strong {
+            display: block;
+
+            font-size: 12px;
+
+            margin-bottom: 2px;
+        }
+
+        .flow-text span {
+            font-size: 9px;
+
+            color: #a9c4d0;
+        }
+
+        .arrow {
+            text-align: center;
+
+            height: 8px;
+
+            color: #6ea6bb;
+
+            font-size: 10px;
+        }
+
+
+        /* ================= ENCRYPTION BADGE ================= */
+
+        .encryption-badge {
+
+            position: absolute;
+
+            right: -25px;
+            top: 105px;
+
+            background: #ff6580;
+
+            color: white;
+
+            padding: 11px 15px;
+
+            border-radius: 12px;
+
+            font-size: 11px;
+
+            box-shadow: 0 10px 25px rgba(255,101,128,0.35);
+
+            transform: rotate(3deg);
+        }
+
+        .encryption-badge i {
+            margin-right: 6px;
+        }
+
+
+        /* ================= BOTTOM TEXT ================= */
+
+        .bottom-note {
+            position: absolute;
+
+            bottom: 13px;
+            left: 0;
+            right: 0;
+
+            text-align: center;
+
+            color: rgba(255,255,255,0.45);
+
+            font-size: 10px;
+
+            z-index: 3;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1100px) {
+
+            .hero {
+                padding: 30px 4%;
+            }
+
+            .hero-content h1 {
+                font-size: 40px;
+            }
+
+            .security-card {
+                width: 390px;
+            }
+
+        }
+
+
+        @media (max-width: 850px) {
+
+            body {
+                overflow: auto;
+            }
+
+            .navbar {
+                height: auto;
+                padding: 18px 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                height: auto;
+                min-height: calc(100vh - 70px);
+
+                flex-direction: column;
+
+                padding: 45px 5%;
+
+                gap: 35px;
+            }
+
+            .hero-content,
+            .visual {
+                width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 38px;
+            }
+
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .security-card {
+                width: 100%;
+                max-width: 440px;
+            }
+
+            .encryption-badge {
+                right: -5px;
+            }
+
+            .bottom-note {
+                display: none;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .hero-content h1 {
+                font-size: 32px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+
+            MediSecure
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="#home">
+                Home
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+            <a href="#features">
+                Features
+            </a>
+
+            <a href="#how-it-works">
+                How It Works
+            </a>
+
+            <a href="#contact">
+                Contact
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero">
+
+        <div class="circle circle-one"></div>
+        <div class="circle circle-two"></div>
+
+
+        <!-- ================= LEFT ================= -->
+
+        <div class="hero-content">
+
+            <div class="small-title">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                SECURE MEDICAL DATA TRANSMISSION
+
+            </div>
+
+
+            <h1>
+
+                Secure Medical Data
+                <br>
+
+                <span>Transmission Model</span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                A secure web-based system designed to protect
+                sensitive medical information during transmission
+                using hybrid encryption, image steganography,
+                and data integrity verification.
+
+            </p>
+
+
+            <!-- BUTTONS -->
+
+            <div class="buttons">
+
+                <!-- FIXED: Now links to role selection page -->
+                <a href="/role_choice" class="btn btn-primary">
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    Get Started
+
+                </a>
+
+
+                <a href="#how-it-works" class="btn btn-secondary">
+
+                    <i class="fa-solid fa-circle-play"></i>
+
+                    How It Works
+
+                </a>
+
+            </div>
+
+
+
+            <!-- ================= FEATURES ================= -->
+
+            <div class="features" id="features">
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+
+                    <h3>AES + RSA</h3>
+
+                    <p>
+                        Hybrid Encryption
+                    </p>
+
+                </div>
+
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+
+                    <h3>DWT</h3>
+
+                    <p>
+                        Steganography
+                    </p>
+
+                </div>
+
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-fingerprint"></i>
+                    </div>
+
+                    <h3>SHA-256</h3>
+
+                    <p>
+                        Integrity Check
+                    </p>
+
+                </div>
+
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+
+                    <h3>Doctor-to-Doctor</h3>
+
+                    <p>
+                        Secure Sharing
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= RIGHT VISUAL ================= -->
+
+        <div class="visual">
+
+
+            <div class="security-card">
+
+
+                <!-- HEADER -->
+
+                <div class="card-header">
+
+                    <div class="card-title">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        Secure Transmission
+
+                    </div>
+
+
+                    <div class="secure-status">
+
+                        <div class="status-dot"></div>
+
+                        Protected
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FLOW -->
+
+                <div class="flow">
+
+
+                    <!-- PATIENT DATA -->
+
+                    <div class="flow-item">
+
+                        <div class="flow-icon">
+
+                            <i class="fa-solid fa-file-medical"></i>
+
+                        </div>
+
+                        <div class="flow-text">
+
+                            <strong>
+                                Patient Medical Data
+                            </strong>
+
+                            <span>
+                                Reports • Prescriptions • X-Ray Images
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="arrow">
+                        ↓
+                    </div>
+
+
+                    <!-- AES -->
+
+                    <div class="flow-item">
+
+                        <div class="flow-icon">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                        </div>
+
+                        <div class="flow-text">
+
+                            <strong>
+                                AES Encryption
+                            </strong>
+
+                            <span>
+                                Medical data is encrypted securely
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="arrow">
+                        ↓
+                    </div>
+
+
+                    <!-- RSA -->
+
+                    <div class="flow-item">
+
+                        <div class="flow-icon">
+
+                            <i class="fa-solid fa-key"></i>
+
+                        </div>
+
+                        <div class="flow-text">
+
+                            <strong>
+                                RSA Key Protection
+                            </strong>
+
+                            <span>
+                                AES key protected using RSA
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="arrow">
+                        ↓
+                    </div>
+
+
+                    <!-- DWT -->
+
+                    <div class="flow-item">
+
+                        <div class="flow-icon">
+
+                            <i class="fa-solid fa-image"></i>
+
+                        </div>
+
+                        <div class="flow-text">
+
+                            <strong>
+                                DWT Steganography
+                            </strong>
+
+                            <span>
+                                Encrypted data embedded into image
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="arrow">
+                        ↓
+                    </div>
+
+
+                    <!-- TRANSMISSION -->
+
+                    <div class="flow-item">
+
+                        <div class="flow-icon">
+
+                            <i class="fa-solid fa-globe"></i>
+
+                        </div>
+
+                        <div class="flow-text">
+
+                            <strong>
+                                Secure Transmission
+                            </strong>
+
+                            <span>
+                                Protected stego-image transmitted
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="arrow">
+                        ↓
+                    </div>
+
+
+                    <!-- DOCTOR -->
+
+                    <div class="flow-item">
+
+                        <div class="flow-icon">
+
+                            <i class="fa-solid fa-user-doctor"></i>
+
+                        </div>
+
+                        <div class="flow-text">
+
+                            <strong>
+                                Authorized Doctor
+                            </strong>
+
+                            <span>
+                                Data extracted and decrypted securely
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- BADGE -->
+
+                <div class="encryption-badge">
+
+                    <i class="fa-solid fa-shield"></i>
+
+                    End-to-End Protection
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BOTTOM -->
+
+        <div class="bottom-note">
+
+            MediSecure • Protecting sensitive medical information through secure digital transmission
+
+        </div>
+
+
+    </section>
+
+
+</body>
+
+</html>

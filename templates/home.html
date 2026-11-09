@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MediSecure - Secure Medical Data Transmission System">
+    <title>MediSecure | Secure Medical Data Transmission</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ========================================
+                   NAVBAR
+                ======================================== */
+        .navbar {
+            height: 76px;
+            background: rgba(13, 43, 63, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: #e74c6f;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 6px 20px rgba(231, 76, 111, 0.4);
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.1);
+            }
+            28% {
+                transform: scale(1);
+            }
+            42% {
+                transform: scale(1.1);
+            }
+            70% {
+                transform: scale(1);
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.25s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #e74c6f;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        /* ========================================
+                   HERO SECTION
+                ======================================== */
+        .hero {
+            min-height: 100vh;
+            background: 
+                linear-gradient(135deg, rgba(10, 26, 43, 0.90) 0%, rgba(13, 43, 63, 0.85) 50%, rgba(10, 26, 43, 0.90) 100%),
+                url('https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 5% 60px;
+            position: relative;
+        }
+
+        /* Medical abstract overlay pattern */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(231, 76, 111, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(135, 211, 255, 0.05) 0%, transparent 50%),
+                repeating-linear-gradient(45deg, 
+                    transparent 0px, 
+                    transparent 40px, 
+                    rgba(255, 255, 255, 0.01) 40px, 
+                    rgba(255, 255, 255, 0.01) 41px
+                );
+            pointer-events: none;
+        }
+
+        /* Floating medical icons */
+        .floating-icon {
+            position: absolute;
+            opacity: 0.06;
+            font-size: 80px;
+            color: white;
+            pointer-events: none;
+            animation: floatIcon 20s ease-in-out infinite;
+        }
+
+        .floating-icon:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-icon:nth-child(2) {
+            bottom: 15%;
+            right: 8%;
+            animation-delay: 5s;
+            font-size: 100px;
+        }
+
+        .floating-icon:nth-child(3) {
+            top: 50%;
+            left: 3%;
+            animation-delay: 10s;
+            font-size: 60px;
+        }
+
+        .floating-icon:nth-child(4) {
+            top: 20%;
+            right: 3%;
+            animation-delay: 3s;
+            font-size: 70px;
+        }
+
+        .floating-icon:nth-child(5) {
+            bottom: 30%;
+            left: 12%;
+            animation-delay: 7s;
+            font-size: 50px;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translate(30px, -20px) rotate(5deg) scale(1.1);
+            }
+            50% {
+                transform: translate(-20px, 30px) rotate(-3deg) scale(0.9);
+            }
+            75% {
+                transform: translate(20px, -10px) rotate(7deg) scale(1.05);
+            }
+        }
+
+        /* Animated gradient glow */
+        .glow-orbs {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        .glow-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: #e74c6f;
+            top: -100px;
+            right: -100px;
+            animation: pulseGlow 8s ease-in-out infinite;
+        }
+
+        .glow-orb-2 {
+            width: 300px;
+            height: 300px;
+            background: #87d3ff;
+            bottom: -50px;
+            left: -50px;
+            animation: pulseGlow 10s ease-in-out infinite 2s;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                opacity: 0.1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.2;
+                transform: scale(1.2);
+            }
+        }
+
+        /* ========================================
+                   CENTER CONTENT
+                ======================================== */
+        .hero-content {
+            width: 100%;
+            max-width: 900px;
+            color: white;
+            text-align: center;
+            position: relative;
+            z-index: 3;
+        }
+
+        .small-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #b5e4ff;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .small-title i {
+            color: #ff7a94;
+        }
+
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content h1 span {
+            color: #87d3ff;
+            text-shadow: 0 0 40px rgba(135, 211, 255, 0.2);
+        }
+
+        .hero-description {
+            max-width: 650px;
+            margin: 0 auto 32px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 18px;
+            line-height: 1.7;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ========================================
+                   BUTTON
+                ======================================== */
+        .btn {
+            padding: 16px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #e74c6f, #ff6b8a);
+            color: white;
+            box-shadow: 0 10px 30px rgba(231, 76, 111, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(231, 76, 111, 0.5);
+        }
+
+        /* ========================================
+                   FEATURES
+                ======================================== */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 800px;
+            margin: 40px auto 0;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 18px 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 101, 128, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff8aa3;
+            margin: 0 auto 10px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover .feature-icon {
+            background: rgba(255, 101, 128, 0.25);
+            transform: scale(1.05);
+        }
+
+        .feature h3 {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .feature p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .bottom-note {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 11px;
+            z-index: 3;
+            letter-spacing: 0.3px;
+        }
+
+        .bottom-note i {
+            color: #e74c6f;
+            margin: 0 4px;
+        }
+
+        /* ========================================
+                   CONTACT SECTION
+                ======================================== */
+        .contact-section {
+            padding: 80px 5% 60px;
+            background: #0a1a2b;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-container h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .contact-container h2 span {
+            color: #87d3ff;
+        }
+
+        .contact-container p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 30px 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+            border-color: rgba(231, 76, 111, 0.3);
+        }
+
+        .contact-card i {
+            font-size: 32px;
+            color: #e74c6f;
+            background: rgba(231, 76, 111, 0.1);
+            padding: 14px;
+            border-radius: 12px;
+        }
+
+        .contact-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .contact-card p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 0;
+        }
+
+        .contact-card .contact-link {
+            color: #87d3ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .contact-card .contact-link:hover {
+            color: #ffffff;
+        }
+
+        /* ========================================
+                   FOOTER
+                ======================================== */
+        .footer {
+            background: #06121e;
+            padding: 20px 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .footer i {
+            color: #e74c6f;
+            margin: 0 4px;
+        }
+
+        /* ========================================
+                   RESPONSIVE
+                ======================================== */
+        @media (max-width: 900px) {
+            .hero-content h1 {
+                font-size: 40px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 100%;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .contact-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-container h2 {
+                font-size: 30px;
+            }
+
+            .floating-icon {
+                display: none;
+            }
+
+            .glow-orb-1,
+            .glow-orb-2 {
+                display: none;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .hero {
+                padding: 80px 4% 40px;
+                background-attachment: scroll;
+            }
+
+            .hero-content h1 {
+                font-size: 30px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .features {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .feature {
+                padding: 14px 12px;
+            }
+
+            .feature-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 15px;
+            }
+
+            .feature h3 {
+                font-size: 12px;
+            }
+
+            .feature p {
+                font-size: 10px;
+            }
+
+            .btn {
+                padding: 14px 32px;
+                font-size: 14px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .bottom-note {
+                display: none;
+            }
+
+            .contact-section {
+                padding: 50px 4% 40px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .contact-container h2 {
+                font-size: 26px;
+            }
+
+            .contact-container p {
+                font-size: 14px;
+            }
+
+            .contact-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========================================
+    NAVBAR
+    ======================================== -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            MediSecure
+        </div>
+
+        <div class="nav-links">
+            <a href="#contact">Contact</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        </div>
+    </nav>
+
+    <!-- ========================================
+    HERO SECTION
+    ======================================== -->
+    <section class="hero" id="home">
+        <!-- Floating Medical Icons -->
+        <div class="floating-icon">
+            <i class="fa-solid fa-heart-pulse"></i>
+        </div>
+        <div class="floating-icon">
+            <i class="fa-solid fa-stethoscope"></i>
+        </div>
+        <div class="floating-icon">
+            <i class="fa-solid fa-hospital"></i>
+        </div>
+        <div class="floating-icon">
+            <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div class="floating-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+        <!-- Glow Orbs -->
+        <div class="glow-orb-1 glow-orbs"></div>
+        <div class="glow-orb-2 glow-orbs"></div>
+
+        <div class="hero-content">
+            <div class="small-title">
+                <i class="fa-solid fa-shield-halved"></i>
+                Secure Medical Data Transmission
+            </div>
+
+            <h1>
+                Secure Medical Data
+                <br>
+                <span>Transmission Model</span>
+            </h1>
+
+            <p class="hero-description">
+                A secure web-based system designed to protect sensitive medical information
+                during transmission using hybrid encryption, image steganography,
+                and data integrity verification.
+            </p>
+
+            <a href="{{ url_for('doctor_login') }}" class="btn">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Get Started
+            </a>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3>AES + RSA</h3>
+                    <p>Hybrid Encryption</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                    <h3>DWT</h3>
+                    <p>Steganography</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-fingerprint"></i>
+                    </div>
+                    <h3>SHA-256</h3>
+                    <p>Integrity Check</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+                    <h3>Doctor-to-Doctor</h3>
+                    <p>Secure Sharing</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-note">
+            <i class="fa-solid fa-shield-halved"></i>
+            MediSecure • Protecting sensitive medical information through secure digital transmission
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+    </section>
+
+    <!-- ========================================
+    CONTACT SECTION
+    ======================================== -->
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <h2>Get in <span>Touch</span></h2>
+            <p>Have questions about MediSecure? Reach out to us through any of the channels below.</p>
+
+            <div class="contact-grid">
+                <!-- Email -->
+                <div class="contact-card">
+                    <i class="fa-solid fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p>Send us an email</p>
+                    <a href="mailto:admin123@gmail.com" class="contact-link">admin123@gmail.com</a>
+                </div>
+
+                <!-- Phone -->
+                <div class="contact-card">
+                    <i class="fa-solid fa-phone"></i>
+                    <h3>Phone</h3>
+                    <p>Call us directly</p>
+                    <a href="tel:+918310394376" class="contact-link">8310394376</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+    FOOTER
+    ======================================== -->
+    <div class="footer">
+        <p>
+            <i class="fa-solid fa-shield-halved"></i>
+            MediSecure • Protecting sensitive medical information through secure digital transmission
+            <i class="fa-solid fa-shield-halved"></i>
+        </p>
+    </div>
+
+    <!-- ========================================
+    JAVASCRIPT
+    ======================================== -->
+    <script>
+        // Smooth scroll for contact link
+        document.querySelector('a[href="#contact"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector('#contact');
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(13, 43, 63, 0.98)';
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.3)';
+            } else {
+                navbar.style.background = 'rgba(13, 43, 63, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
+
+</body>
+
+</html>
